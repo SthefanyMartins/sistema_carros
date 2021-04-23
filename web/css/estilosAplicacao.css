@@ -1,0 +1,298 @@
+body
+{
+    margin: 0;
+    padding: 0%;
+    font-family: arial, verdana, sans-serif;
+    text-align: left;
+}
+
+.celulaAtalhos{
+    background-color: #F8F8F8;
+    text-align: left;
+    width: 100%;
+    height: 30px;
+}
+
+.celulaMenu{
+    text-align: left;
+    vertical-align: top;
+    background-color: #F8F8F8;
+    width: 200px;
+}
+
+.celulaPagina{
+    text-align: left;
+    vertical-align: top;
+    width: 100%;
+}
+
+.conteudoPagina{
+    padding-left: 10px;
+    margin-top: 5px;
+    text-align: left;
+    vertical-align: top;
+}
+
+a:hover{
+    text-decoration: none;
+    font-weight: bold;
+    color: #5292D2;
+}
+a:visited{
+    text-decoration: none;
+    font-weight: bold;
+    color: #5292D2;
+}
+a:active{
+    text-decoration: none;
+    font-weight: bold;
+    color: #5292D2;
+}
+a:link{
+    text-decoration: none;
+    font-weight: bold;
+    color: #5292D2;
+}
+
+.mensagemError{
+    font-family: verdana;
+    font-size: 10pt;
+    color: black;
+    font-weight: bold;
+    background-color: #FFC6C6;
+}
+
+.bordaError {bbackground: ttransparent; width:30%;}
+.bordaError .b1, .bordaError .b2, .bordaError .b3, .bordaError .b4, .bordaError .b1b, .bordaError .b2b, .bordaError .b3b, .bordaError .b4b {display:block; overflow:hidden; font-size:1px;}
+.bordaError .b1, .bordaError .b2, .bordaError .b3, .bordaError .b1b, .bordaError .b2b, .bordaError .b3b {height:1px;}
+.bordaError .b2, .bordaError .b3, .bordaError .b4 {background:#FFC6C6; border-left:1px solid #FF0000; border-right:1px solid #FF0000;}
+.bordaError .b1 {margin:0 5px; background:#FF0000;}
+.bordaError .b2 {margin:0 3px; border-width:0 2px;}
+.bordaError .b3 {margin:0 2px;}
+.bordaError .b4 {height:2px; margin:0 1px;}
+.bordaError .conteudo {padding:5px;display:block; background:#FFC6C6; border-left:1px solid #FF0000; border-right:1px solid #FF0000;}
+
+.mensagemWarn{
+    font-family: verdana;
+    font-size: 10pt;
+    color: black;
+    font-weight: bold;
+    background-color: #FFFFC6;
+}
+
+.bordaWarn {bbackground: ttransparent; width:30%;}
+.bordaWarn .b1, .bordaWarn .b2, .bordaWarn .b3, .bordaWarn .b4, .bordaWarn .b1b, .bordaWarn .b2b, .bordaWarn .b3b, .bordaWarn .b4b {display:block; overflow:hidden; font-size:1px;}
+.bordaWarn .b1, .bordaWarn .b2, .bordaWarn .b3, .bordaWarn .b1b, .bordaWarn .b2b, .bordaWarn .b3b {height:1px;}
+.bordaWarn .b2, .bordaWarn .b3, .bordaWarn .b4 {background:#FFFFC6; border-left:1px solid #CACA00; border-right:1px solid #CACA00;}
+.bordaWarn .b1 {margin:0 5px; background:#CACA00;}
+.bordaWarn .b2 {margin:0 3px; border-width:0 2px;}
+.bordaWarn .b3 {margin:0 2px;}
+.bordaWarn .b4 {height:2px; margin:0 1px;}
+.bordaWarn .conteudo {padding:5px;display:block; background:#FFFFC6; border-left:1px solid #CACA00; border-right:1px solid #CACA00;}
+
+.mensagemInfo{
+    font-family: verdana;
+    font-size: 10pt;
+    color: black;
+    font-weight: bold;
+    background-color: #C6C6FF;
+}
+
+.bordaInfo {bbackground: ttransparent; width:30%;}
+.bordaInfo .b1, .bordaInfo .b2, .bordaInfo .b3, .bordaInfo .b4, .bordaInfo .b1b, .bordaInfo .b2b, .bordaInfo .b3b, .bordaInfo .b4b {display:block; overflow:hidden; font-size:1px;}
+.bordaInfo .b1, .bordaInfo .b2, .bordaInfo .b3, .bordaInfo .b1b, .bordaInfo .b2b, .bordaInfo .b3b {height:1px;}
+.bordaInfo .b2, .bordaInfo .b3, .bordaInfo .b4 {background:#C6C6FF; border-left:1px solid #0000FF; border-right:1px solid #0000FF;}
+.bordaInfo .b1 {margin:0 5px; background:#0000FF;}
+.bordaInfo .b2 {margin:0 3px; border-width:0 2px;}
+.bordaInfo .b3 {margin:0 2px;}
+.bordaInfo .b4 {height:2px; margin:0 1px;}
+.bordaInfo .conteudo {padding:5px;display:block; background:#C6C6FF; border-left:1px solid #0000FF; border-right:1px solid #0000FF;}
+
+.mensagemErro{
+    font-size: 10pt;
+    color: red;
+    font-weight: bold;
+}
+
+.linha_titulo{
+    background-color: #006699;
+    color: #FFFFFF;
+}
+
+.linha_sobre{
+    background-color: #E8E8E8;
+}
+
+.linha_normal{
+    background-color: #FFFFFF;
+}
+
+.titlePopup{
+    background-color: #5292D2;
+}
+
+.texto{
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+    font-size: 13px;
+    font-weight: normal;
+    color: #333333;
+}
+
+.Filtro_Col1{
+    width: 15%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+}
+.Filtro_Col2{
+    width: 50%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+}
+.Filtro_Col3{
+    width: 10%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+}
+.Filtro_Col4{
+    width: 25%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+}
+.Filtro_Memo{
+    width: 90%;
+    height:100%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+    text-align:left;
+    vertical-align:top;
+}
+.Filtro_Comandos{
+    width: 10%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+    vertical-align:top;
+}
+.Mensagem_Icone{
+    width: 5%;
+    vertical-align:top;
+}
+.Mensagem_Texto{
+    width: 95%;
+    font-size: 11px;
+    font-family: Verdana, sans-serif, Arial, Helvetica ;
+    vertical-align:top;
+}
+.alinha_direita{
+    text-align:right;
+}
+
+.alinha_esquerda{
+    text-align:left;
+}
+
+.alinha_topo{
+    vertical-align: top;
+}
+
+.alinha_centro{
+    text-align:center;
+
+}
+.Registro_Selecionado{
+    font-size: 14px;
+    font-style:italic;
+    color:blue;
+    padding-left: 20px;
+    background-image: url("/Loggi/imagens/registroatual.gif");
+    background-repeat:no-repeat;
+
+}
+
+.permissao_nv0{
+    text-align:left;
+    font-weight: bold;
+}
+
+.permissaoCB_nv0{
+    text-align:left;
+}
+
+.permissaoCB_nv1{
+    text-align:left;
+    margin-left: 20px;
+}
+
+.permissaoCB_nv2{
+    text-align:left;
+    margin-left: 40px;
+}
+
+.permissao_nv1{
+    text-align:left;
+}
+
+.permissao_nv2{
+    text-align:left;
+}
+
+.tooltip {
+    background-color: #FFFFFF;
+    border-color: #000000;
+    border-width: 3px;
+    padding:10px;
+}
+.campoCenarioConsultaCusto{
+    width:250px;
+}
+.campoCenarioCadastro{
+    width:200px;
+}
+/* texto do iframe da janela de help das telas */
+.helperContainer{
+    font-family: Arial, Verdana, serif;
+    text-align: justify;
+    padding: 10px;
+}
+
+.helperContainer table{
+    width: 95%;
+}
+
+.fonteMobileLabel{
+    font-size: 20px;
+}
+
+.fonteMobileInput{
+    font-size: 16px;
+}
+
+.noBorderDatatableColumn{
+    border-bottom-width:0px;
+    border-top-width:0px;
+    border-left-width:0px;
+    border-right-width:0px;
+}
+
+a.linkPreto:link, a.linkPreto:active, a.linkPreto:visited {
+    text-decoration: none;
+    font-weight: bold;
+    color: #000;
+}
+
+a.linkPreto:hover {
+    text-decoration: underline;
+    font-weight: bold;
+    color: #000;
+}
+
+.negrito {
+    font-weight: bold;
+}
+
+.imagem-avaliacao {
+    display: block;
+    max-width:480px;
+    max-height:360px;
+    width: auto;
+    height: auto;
+}

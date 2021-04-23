@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="1.2" 
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+    <application>
+        <message-bundle>br.com.formedici.carros.util.bundle.BundleMsgsPortugues</message-bundle>
+    </application>
+
+    <managed-bean>
+        <managed-bean-name>DefaultSessionBean</managed-bean-name>
+        <managed-bean-class>br.com.formedici.carros.controller.bean.DefaultSessionBean</managed-bean-class>
+
+        <managed-bean-scope>session</managed-bean-scope></managed-bean>
+    <managed-bean>
+        <managed-bean-name>popupWebBean</managed-bean-name>
+        <managed-bean-class>br.com.formedici.carros.util.PopupManagerWebBean</managed-bean-class>
+
+
+        <managed-bean-scope>session</managed-bean-scope></managed-bean>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>home</from-outcome>
+            <to-view-id>/home.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <managed-bean>
+        <managed-bean-name>carroWebBean</managed-bean-name>
+        <managed-bean-class>br.com.formedici.carros.view.CarroWebBean</managed-bean-class>
+
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>carro</from-outcome>
+            <to-view-id>/pages/carro/listacarro.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/pages/carro/listacarro.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>form</from-outcome>
+            <to-view-id>/pages/carro/formcarro.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- Conversores -->
+
+    <!-- Formata combobox -->
+
+    <!-- Formata a data no padrão dd/mm/yyyy -->
+    <converter>
+        <converter-id>
+            ValorData
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorData</converter-class>
+    </converter>
+
+    <!-- Formata o valor para o padrao 0.0 -->
+    <converter>
+        <converter-id>
+            ValorDouble
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorDouble</converter-class>
+    </converter>
+
+    <!-- Formata a data no padrão MM/yyyy -->
+    <converter>
+        <converter-id>
+            ValorDataMesAno
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorDataMesAno</converter-class>
+    </converter>
+
+    <!-- Formata a data no padrão dd/mm/yyyy HH:mm-->
+    <converter>
+        <converter-id>
+            ValorDataHora
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorDataHora</converter-class>
+    </converter>
+
+    <!-- Formata o valor no padrão 0.00 -->
+    <converter>
+        <converter-id>
+            ValorNumero
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorNumero</converter-class>
+    </converter>
+
+    <!-- Formata o valor no padrão 0.000000 -->
+    <converter>
+        <converter-id>
+            ValorNumeroSeisCasasDecimais
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorNumeroSeisCasasDecimais</converter-class>
+    </converter>
+
+    <!-- Formata o valor no padrão 0.0000 -->
+    <converter>
+        <converter-id>
+            ValorPorcentagem
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorPorcentagem</converter-class>
+    </converter>
+
+    <!-- Formata o valor de Boolean para Sim/Não -->
+    <converter>
+        <converter-id>
+            ValorBoolean
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorBoolean</converter-class>
+    </converter>
+
+    <!-- Formata o valor de Date para Hora (HH:mm) -->
+    <converter>
+        <converter-id>
+            ValorHora
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorHora</converter-class>
+    </converter>
+
+    <!-- Converter Padrao -->
+    <converter>
+        <converter-id>
+            ValorPadrao
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ValorPadrao</converter-class>
+    </converter>
+
+    <!-- Converter para a descrição do tipo de serviço do MPServico -->
+    <converter>
+        <converter-id>
+            TipoServico
+        </converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.TipoServico</converter-class>
+    </converter>
+
+    <converter>
+        <converter-id>ProfsystDoubleConverter</converter-id>
+        <converter-class>br.com.formedici.carros.util.converter.ProfsystDoubleConverter</converter-class>
+    </converter>
+</faces-config>

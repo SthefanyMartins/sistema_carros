@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
+Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://java.sun.com/jsf/html"
+              xmlns:a4j="http://richfaces.org/a4j"
+              xmlns:rich="http://richfaces.org/rich"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <a4j:commandButton value="#{label}"
+                       image="#{image}"                       
+                       onclick="#{rich:component(richx:concat(confirmId,'confirmation'))}.show();return false" />
+
+    
+    <rich:modalPanel id="#{confirmId}confirmation" width="350" autosized="true">
+        <f:facet name="header">Confirmação</f:facet>
+        <h:panelGrid columns="2">
+            <h:graphicImage value="/imagens/warning_gde.gif" />
+            <h:outputText value="#{message}" style="font-size: 10pt;"/>
+        </h:panelGrid>
+        <a4j:jsFunction name="submit" action="#{bean[action]}" reRender="#{reRender}"/>
+        <div align="center">
+            <h:panelGrid columns="2">
+                <h:commandButton
+                    id="btn_conf_confirmar"
+                    onclick="#{rich:component(richx:concat(confirmId,'confirmation'))}.hide(); submit(); return false;"
+                    image="/imagens/btn_confirmar.gif">
+                </h:commandButton>
+
+                <h:commandButton
+                    id="btn_conf_cancelar"
+                    onclick="#{rich:component(richx:concat(confirmId,'confirmation'))}.hide();return false"
+                    image="/imagens/btn_cancelar.gif">
+                </h:commandButton>
+            </h:panelGrid>
+        </div>
+    </rich:modalPanel>
+    
+</ui:component>
