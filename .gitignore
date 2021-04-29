@@ -3,4 +3,5 @@
 /dist
 nbproject/private/private.xml
 nbproject/faces-config.NavData
-setup/sun-resources.xml
+nbproject/genfiles.properties
+nbproject/build-impl.xml
