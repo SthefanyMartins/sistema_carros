@@ -48,6 +48,26 @@
         </navigation-case>
     </navigation-rule>
 
+    <managed-bean>
+        <managed-bean-name>usuarioWebBean</managed-bean-name>
+        <managed-bean-class>br.com.formedici.carros.view.UsuarioWebBean</managed-bean-class>
+
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>usuario</from-outcome>
+            <to-view-id>/pages/usuario/listausuario.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/pages/usuario/listausuario.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>form</from-outcome>
+            <to-view-id>/pages/usuario/formusuario.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
     <!-- Conversores -->
 
     <!-- Formata combobox -->

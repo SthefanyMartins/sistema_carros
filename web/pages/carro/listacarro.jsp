@@ -17,16 +17,29 @@
             <h:form>
                 <a4j:keepAlive beanName="carroWebBean" />
 
-                <rich:panel header="Consulta de Carros" style="width:600px">
+                <rich:panel header="Consulta de Carros" style="width:800px">
 
                     <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
                         <h:outputText value="Modelo"/>
                         <h:inputText value="#{carroWebBean.pesqModelo}" size="30" maxlength="50"/>
+
+                        <h:outputText value="Fabricante"/>
+                        <h:inputText value="#{carroWebBean.pesqFabricante}" size="30" maxlength="50"/>
+
+                        <h:outputText value="Cor"/>
+                        <h:inputText value="#{carroWebBean.pesqCor}" size="30" maxlength="50"/>
+
+                        <h:outputText value="Ano"/>
+                        <h:inputText value="#{carroWebBean.pesqAno}" size="4" maxlength="4" converterMessage="O campo ano é numérico! Digite um ano válido!"/>
                     </h:panelGrid>
 
                     <br/>
 
                     <h:commandButton id="botaoConsultar" value="Consultar" action="#{carroWebBean.consultar}" image="/imagens/btn_consultar.gif" />
+                    <rich:componentControl for="modalMensagemProcessando" attachTo="botaoConsultar" operation="show" event="onmouseup" />
+                    <rich:componentControl for="modalMensagemProcessando" attachTo="botaoConsultar" operation="hide" event="oncomplete" />
+                    <rich:spacer width="3"/>
+                    <h:commandButton id="botaoLimpar" value="Limpar consulta" action="#{carroWebBean.limparConsulta}" image="/imagens/btn_limpar_consulta.gif" />
                     <rich:componentControl for="modalMensagemProcessando" attachTo="botaoConsultar" operation="show" event="onmouseup" />
                     <rich:componentControl for="modalMensagemProcessando" attachTo="botaoConsultar" operation="hide" event="oncomplete" />
                     <rich:spacer width="3"/>
@@ -90,11 +103,25 @@
                             <h:outputText value="#{carro.modelo}"  />
                         </rich:column>
 
+                        <rich:column sortBy="#{carro.modelo}" filterBy="#{carro.fabricante}" filterEvent="onkeyup">
+                            <f:facet name="header">
+                                <h:outputText value="Fabricante" />
+                            </f:facet>
+                            <h:outputText value="#{carro.fabricante}"/>
+                        </rich:column>
+
+                        <rich:column sortBy="#{carro.modelo}" filterBy="#{carro.cor}" filterEvent="onkeyup" width="100%">
+                            <f:facet name="header">
+                                <h:outputText value="Cor" />
+                            </f:facet>
+                            <h:outputText value="#{carro.cor}"/>
+                        </rich:column>
+
                         <rich:column sortBy="#{carro.modelo}" >
                             <f:facet name="header">
                                 <h:outputText value="Ano" />
                             </f:facet>
-                            <h:outputText value="#{carro.ano}" converter="ValorData"  />
+                            <h:outputText value="#{carro.ano}" converter="ValorData"/>
                         </rich:column>
 
                         <rich:column style="text-align:center">

@@ -26,10 +26,20 @@ public class CarroBean extends PadraoBean {
         return super.DAO;
     }
 
-    public List<Carro> consultar(String modelo) {
+    public List<Carro> consultar(String modelo, String fabricante, String cor, Integer ano) {
         String consulta = "SELECT c FROM Carro c";
         if (!Util.isNullOrEmpty(modelo)) {
             consulta += Util.colocaWhereOuAnd(consulta) + "c.modelo LIKE '%" + modelo + "%'";
+        }
+        if (!Util.isNullOrEmpty(fabricante)) {
+            consulta += Util.colocaWhereOuAnd(consulta) + "c.fabricante LIKE '%" + fabricante + "%'";
+        }
+        if (!Util.isNullOrEmpty(cor)) {
+            consulta += Util.colocaWhereOuAnd(consulta) + "c.cor LIKE '%" + cor + "%'";
+        }
+        if (!Util.isNullOrEmpty(ano)) {
+            consulta += Util.colocaWhereOuAnd(consulta) + "c.ano >= '" + ano + "-01-01' AND c.ano <= '" + ano + "-12-31'";
+            //consulta += Util.colocaWhereOuAnd(consulta) + "extract(year from c.ano) = " + ano;
         }
         consulta += " ORDER BY c.codcarro";
         return getDAO().consultaQuery(consulta);

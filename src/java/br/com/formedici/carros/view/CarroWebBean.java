@@ -6,8 +6,10 @@ package br.com.formedici.carros.view;
 
 import br.com.formedici.carros.controller.bean.CarroBean;
 import br.com.formedici.carros.model.Carro;
+import br.com.formedici.carros.util.Util;
 import br.com.formedici.carros.util.JSFHelper;
 import br.com.formedici.carros.util.PadraoWebBean;
+import java.util.Date;
 import javax.faces.model.ListDataModel;
 
 /**
@@ -21,13 +23,17 @@ public class CarroWebBean extends PadraoWebBean {
     private ListDataModel listaCarros;
     private Boolean edicao = false;
     private String pesqModelo;
+    private String pesqFabricante;
+    private String pesqCor;
+    private Integer pesqAno;
 
     public CarroWebBean() {
         this.bean = new CarroBean();
     }
 
     public String consultar() {
-        setListaCarros(new ListDataModel(getBean().consultar(getPesqModelo())));
+        setListaCarros(new ListDataModel(getBean().consultar(getPesqModelo(), getPesqFabricante(),
+                       getPesqCor(), getPesqAno())));
         return "carro";
     }
 
@@ -65,10 +71,40 @@ public class CarroWebBean extends PadraoWebBean {
                 return null;
             }
         }
+        if(validarParaSalvar()){
+            getBean().salvar(getCarro());
+            consultar();
+            return "carro";
+        }
+        return null;
+    }
 
-        getBean().salvar(getCarro());
-        consultar();
-        return "carro";
+    public Boolean validarParaSalvar(){
+        Boolean valida = true;
+        String testaModelo = getCarro().getModelo().trim();
+        String testaFabricante = getCarro().getFabricante().trim();
+        String testaCor = getCarro().getCor().trim();
+        if(Util.isNullOrEmpty(testaModelo)){
+            JSFHelper.addErrorMessage("Campo Modelo é obrigatório!");
+            getCarro().setModelo("");
+            valida = false;
+        }
+        if(Util.isNullOrEmpty(testaFabricante)){
+            JSFHelper.addErrorMessage("Campo Fabricante é obrigatório!");
+            getCarro().setFabricante("");
+            valida = false;
+        }
+        if(Util.isNullOrEmpty(testaCor)){
+            JSFHelper.addErrorMessage("Campo Cor é obrigatório!");
+            getCarro().setCor("");
+            valida = false;
+        }
+        if(getCarro().getAno().compareTo(new Date()) > 0){
+            JSFHelper.addErrorMessage("Digite uma data menor que a atual!");
+            valida = false;
+        }
+
+        return valida;
     }
 
     public String setarCarroExcluir(){
@@ -86,6 +122,13 @@ public class CarroWebBean extends PadraoWebBean {
         }
         consultar();
         return null;
+    }
+
+    public void limparConsulta(){
+        setPesqModelo("");
+        setPesqFabricante("");
+        setPesqCor("");
+        setPesqAno(null);
     }
 
     @Override
@@ -127,5 +170,29 @@ public class CarroWebBean extends PadraoWebBean {
 
     public void setPesqModelo(String pesqModelo) {
         this.pesqModelo = pesqModelo;
+    }
+
+    public String getPesqFabricante() {
+        return pesqFabricante;
+    }
+
+    public void setPesqFabricante(String pesqFabricante) {
+        this.pesqFabricante = pesqFabricante;
+    }
+
+    public Integer getPesqAno() {
+        return pesqAno;
+    }
+
+    public void setPesqAno(Integer pesqAno) {
+        this.pesqAno = pesqAno;
+    }
+
+    public String getPesqCor() {
+        return pesqCor;
+    }
+
+    public void setPesqCor(String pesqCor) {
+        this.pesqCor = pesqCor;
     }
 }

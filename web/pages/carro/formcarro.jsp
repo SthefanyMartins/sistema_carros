@@ -17,7 +17,7 @@
             <h:form>
                 <a4j:keepAlive beanName="carroWebBean" />
 
-                <rich:panel header="Cadastro de Carro" style="width:420px;">
+                <rich:panel header="Cadastro de Carro" style="width:600px;">
                     <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
                         <h:outputText value="Código" />
                         <h:inputText id="codcarro" value="#{carroWebBean.carro.codcarro}" size="10" maxlength="10" rendered="#{! carroWebBean.edicao}" required="true" requiredMessage="Campo Código é obrigatório !" converterMessage="O campo Código deve ser um inteiro." />
@@ -25,6 +25,12 @@
 
                         <h:outputText value="Modelo" />
                         <h:inputText id="modelo" value="#{carroWebBean.carro.modelo}" size="50" maxlength="50" required="true" requiredMessage="Campo Modelo é obrigatório." />
+
+                        <h:outputText value="Fabricante" />
+                        <h:inputText id="fabricante" value="#{carroWebBean.carro.fabricante}" size="50" maxlength="50" required="true" requiredMessage="Campo Fabricante é obrigatório." />
+
+                        <h:outputText value="Cor" />
+                        <h:inputText id="cor" value="#{carroWebBean.carro.cor}" size="50" maxlength="50" required="true" requiredMessage="Campo Cor é obrigatório." />
 
                         <h:outputText value="Ano"/>
                         <rich:calendar id="ano"

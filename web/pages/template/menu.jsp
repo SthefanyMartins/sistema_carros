@@ -11,6 +11,7 @@
                 <rich:toolBar id="toolBar">
                     <rich:menuItem submitMode="ajax" value="Home" action="home" onclick="Richfaces.showModalPanel('modalMensagemProcessando')"  />
                     <rich:menuItem submitMode="ajax" value="Carro" action="carro" onclick="Richfaces.showModalPanel('modalMensagemProcessando')"  />
+                    <rich:menuItem submitMode="ajax" value="Usuário" action="usuario" onclick="Richfaces.showModalPanel('modalMensagemProcessando')"  />
                 </rich:toolBar>
             </h:panelGrid>
         </h:form>
