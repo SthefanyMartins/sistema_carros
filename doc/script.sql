@@ -6,3 +6,10 @@ CREATE TABLE carro (
 	ano date NOT NULL,
 	CONSTRAINT carro_pk PRIMARY KEY (codcarro)
 );
+
+CREATE TABLE usuario (
+	codusuario integer NOT NULL,
+	login character varying(50) NOT NULL,
+	senha character varying(50) NOT NULL,
+	CONSTRAINT usuario_pk PRIMARY KEY (codusuario)
+);
