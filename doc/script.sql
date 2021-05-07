@@ -13,3 +13,20 @@ CREATE TABLE usuario (
 	senha character varying(50) NOT NULL,
 	CONSTRAINT usuario_pk PRIMARY KEY (codusuario)
 );
+
+CREATE TABLE telefone(
+codtelefone integer NOT NULl,
+numero character varying(12) NOT NULL,
+tipo character varying(20) NOT NULL,
+usuario integer,
+CONSTRAINT telefone_pk PRIMARY KEY (codtelefone),
+FOREIGN KEY (usuario) REFERENCES usuario(codusuario)
+);
+
+Create TABLE usuario_carro(
+codusuario integer NOT NULL,
+codcarro integer NOT NULL,
+CONSTRAINT usuario_carro_pk PRIMARY KEY (codusuario, codcarro),
+FOREIGN KEY (codusuario) REFERENCES usuario(codusuario),
+FOREIGN KEY (codcarro) REFERENCES carro(codcarro)
+);
