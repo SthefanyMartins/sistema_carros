@@ -13,7 +13,7 @@
           xmlns:a4j="http://richfaces.org/a4j"
           xmlns:rich="http://richfaces.org/rich" >
     <ui:composition template="/pages/template/template.jsp">
-        <ui:define name="corpo" >
+        <ui:define name="corpo">
             <h:form>
                 <a4j:keepAlive beanName="carroWebBean" />
 
