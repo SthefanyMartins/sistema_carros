@@ -1,11 +1,14 @@
 package br.com.formedici.carros.view;
 
 import br.com.formedici.carros.controller.bean.UsuarioBean;
+import br.com.formedici.carros.model.Telefone;
 import br.com.formedici.carros.model.Usuario;
 import br.com.formedici.carros.util.PadraoWebBean;
 import br.com.formedici.carros.util.Util;
 import br.com.formedici.carros.util.JSFHelper;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import javax.faces.model.ListDataModel;
 /**
  *
@@ -14,15 +17,21 @@ import javax.faces.model.ListDataModel;
 public class UsuarioWebBean extends PadraoWebBean{
     private UsuarioBean bean;
     private Usuario usuario;
+    private Telefone telefone;
     private ListDataModel listaUsuarios;
+    private ListDataModel listaTelefones;
     private Boolean edicao = false;
     private String confirmaSenha;
     private String pesqLogin;
-    private Boolean requiredPassword = true;
     private String armazenarSenha;
+    private String tipoTelefone;
+    private String numeroTelefone;
+    private String statusTelefone;
+    private List<Telefone> listaTelefonesDeletados = new ArrayList<Telefone>();
 
     public UsuarioWebBean(){
         this.bean = new UsuarioBean();
+        setStatusTelefone("novo");
     }
 
     public String consultar() {
@@ -33,17 +42,20 @@ public class UsuarioWebBean extends PadraoWebBean{
     public String inserir() {
         setUsuario(new Usuario());
         getUsuario().setCodusuario(getBean().proximoCodigo(Usuario.class, "codusuario"));
-        setRequiredPassword(true);
         setEdicao(false);
-
+        setListaTelefones(new ListDataModel());
         return "form";
     }
 
     public String editar() {
         setUsuario((Usuario) getListaUsuarios().getRowData());
         setArmazenarSenha(getUsuario().getSenha());
+        List<Telefone> retorno = getBean().consultarTelefones(getUsuario());
+        if(!Util.isNullOrEmpty(retorno)){
+            getUsuario().setTelefones(retorno);
+        }
+        setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setEdicao(true);
-        setRequiredPassword(false);
         return "form";
     }
 
@@ -57,6 +69,7 @@ public class UsuarioWebBean extends PadraoWebBean{
 
     public String salvar() {
         if(validarParaSalvar()){
+            getBean().deletarTelefones(getListaTelefonesDeletados());
             getBean().salvar(getUsuario());
             consultar();
             return "usuario";
@@ -135,7 +148,65 @@ public class UsuarioWebBean extends PadraoWebBean{
     public void limparConsulta(){
         setPesqLogin("");
     }
+//******************************************************************************************************************
     
+    public void adicionarTelefone() {
+        if (!"Celular".equals(getTipoTelefone()) && !"Telefone".equals(getTipoTelefone())) {
+            JSFHelper.addErrorMessage("Selecione um tipo de telefone!");
+            return;
+        } else if (Util.isNullOrEmpty(getNumeroTelefone())) {
+            JSFHelper.addErrorMessage("Digite um número de telefone válido!");
+            return;
+        } else if ("novo".equals(getStatusTelefone())) {
+            setTelefone(new Telefone());
+            getTelefone().setCodtelefone(definirCodigoTelefone());
+            System.out.println("******" + getTelefone().getCodtelefone() + "*******");
+        } else {
+            getUsuario().getTelefones().remove(getTelefone());
+        }
+        getTelefone().setTipo(getTipoTelefone());
+        getTelefone().setNumero(getNumeroTelefone());
+        getTelefone().setUsuario(getUsuario());
+        getUsuario().getTelefones().add(getTelefone());
+        setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
+        setTipoTelefone("");
+        setNumeroTelefone(null);
+        setStatusTelefone("novo");
+    }
+
+    public Integer definirCodigoTelefone(){
+        Integer cod = getBean().proximoCodigo(Telefone.class, "codtelefone");
+        Integer codFinal = cod;
+        List<Telefone> telefones = getUsuario().getTelefones();
+        for(Telefone t : telefones){
+            if(t.getCodtelefone() >= cod){
+                codFinal = t.getCodtelefone() + 1;
+            }
+        }
+        return codFinal;
+    }
+
+    public void editarTelefone(){
+        setTelefone((Telefone) getListaTelefones().getRowData());
+        setTipoTelefone(getTelefone().getTipo());
+        setNumeroTelefone(getTelefone().getNumero());
+        setStatusTelefone("editar");
+    }
+
+    public String setarTelefoneExcluir(){
+        setTelefone((Telefone) getListaTelefones().getRowData());
+        return null;
+    }
+
+    public void excluirTelefone(){
+        Integer cod = getBean().proximoCodigo(Telefone.class, "codtelefone");
+        if(getTelefone().getCodtelefone() < cod){
+            getListaTelefonesDeletados().add(getTelefone());
+        }
+        getUsuario().getTelefones().remove(getTelefone());
+        setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
+    }
+
     //getters e setters
     @Override
     public UsuarioBean getBean(){
@@ -186,20 +257,60 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.confirmaSenha = confirmaSenha;
     }
 
-    public Boolean getRequiredPassword() {
-        return requiredPassword;
-    }
-
-    public void setRequiredPassword(Boolean requiredPassword) {
-        this.requiredPassword = requiredPassword;
-    }
-
     public String getArmazenarSenha() {
         return armazenarSenha;
     }
 
     public void setArmazenarSenha(String armazenarSenha) {
         this.armazenarSenha = armazenarSenha;
+    }
+
+    public String getNumeroTelefone() {
+        return numeroTelefone;
+    }
+
+    public void setNumeroTelefone(String numeroTelefone) {
+        this.numeroTelefone = numeroTelefone;
+    }
+
+    public String getTipoTelefone() {
+        return tipoTelefone;
+    }
+
+    public void setTipoTelefone(String tipoTelefone) {
+        this.tipoTelefone = tipoTelefone;
+    }
+
+    public Telefone getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(Telefone telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getStatusTelefone() {
+        return statusTelefone;
+    }
+
+    public void setStatusTelefone(String statusTelefone) {
+        this.statusTelefone = statusTelefone;
+    }
+
+    public ListDataModel getListaTelefones() {
+        return listaTelefones;
+    }
+
+    public void setListaTelefones(ListDataModel listaTelefones) {
+        this.listaTelefones = listaTelefones;
+    }
+
+    public List<Telefone> getListaTelefonesDeletados() {
+        return listaTelefonesDeletados;
+    }
+
+    public void setListaTelefonesDeletados(List<Telefone> listaTelefonesDeletados) {
+        this.listaTelefonesDeletados = listaTelefonesDeletados;
     }
 
 }

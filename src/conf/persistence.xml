@@ -3,6 +3,8 @@
   <persistence-unit name="sistema_carros" transaction-type="RESOURCE_LOCAL">
     <non-jta-data-source>sistema_carros</non-jta-data-source>
     <class>br.com.formedici.carros.model.Carro</class>
+    <class>br.com.formedici.carros.model.Usuario</class>
+    <class>br.com.formedici.carros.model.Telefone</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="toplink.logging.level" value="FINE"/>

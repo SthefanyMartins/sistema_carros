@@ -16,7 +16,7 @@ CREATE TABLE usuario (
 
 CREATE TABLE telefone(
 codtelefone integer NOT NULl,
-numero character varying(12) NOT NULL,
+numero character varying(13) NOT NULL,
 tipo character varying(20) NOT NULL,
 usuario integer,
 CONSTRAINT telefone_pk PRIMARY KEY (codtelefone),

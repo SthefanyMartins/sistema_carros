@@ -6,11 +6,15 @@
 package br.com.formedici.carros.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -33,6 +37,9 @@ public class Usuario extends PadraoModel implements Serializable{
 
     @Column(name="senha", length=50, nullable=false)
     private String senha;
+
+    @OneToMany(mappedBy = "usuario", cascade =  CascadeType.ALL)
+    private List<Telefone> telefones = new ArrayList<Telefone>();
 
     public Usuario(){
 
@@ -60,6 +67,14 @@ public class Usuario extends PadraoModel implements Serializable{
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public List<Telefone> getTelefones() {
+        return telefones;
+    }
+
+    public void setTelefones(List<Telefone> telefones) {
+        this.telefones = telefones;
     }
 
     

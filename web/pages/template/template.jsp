@@ -23,7 +23,6 @@
         <rich:jQuery id="mskHora" selector=".txtHora" timing="onload" query="mask('99:99',{placeholder:' '})" />
         <rich:jQuery id="mskCEP" selector=".txtCEP" timing="onload" query="mask('99999-999',{placeholder:'-'})" />
 
-
         <table border="0" align="center" cellpadding="0" cellspacing="0" height="100%" width="100%">
             <tr>
                 <td >

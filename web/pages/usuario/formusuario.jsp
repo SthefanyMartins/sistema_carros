@@ -18,20 +18,105 @@
                 <a4j:keepAlive beanName="usuarioWebBean" />
 
                 <rich:panel header="Cadastro de Usuario" style="width:600px;">
-                    <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
-                        <h:outputText value="Código" />
-                        <h:inputText id="codusuario" value="#{usuarioWebBean.usuario.codusuario}" size="10" maxlength="10" rendered="#{! usuarioWebBean.edicao}" required="true" requiredMessage="Campo Código é obrigatório !" converterMessage="O campo Código deve ser um inteiro." />
-                        <h:inputText id="codusuario_desabilitado" value="#{usuarioWebBean.usuario.codusuario}" size="10" rendered="#{usuarioWebBean.edicao}" disabled="true" />
+                    <rich:tabPanel>
+                        <rich:tab label="Cadastro">
+                            <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
+                                <h:outputText value="Código" />
+                                <h:inputText id="codusuario" value="#{usuarioWebBean.usuario.codusuario}" size="10" maxlength="10" rendered="#{! usuarioWebBean.edicao}" converterMessage="O campo Código deve ser um inteiro." />
+                                <h:inputText id="codusuario_desabilitado" value="#{usuarioWebBean.usuario.codusuario}" size="10" rendered="#{usuarioWebBean.edicao}" disabled="true" />
 
-                        <h:outputText value="Login" />
-                        <h:inputText id="login" value="#{usuarioWebBean.usuario.login}" size="50" maxlength="50" required="true" requiredMessage="Campo Login é obrigatório." />
+                                <h:outputText value="Login" />
+                                <h:inputText id="login" value="#{usuarioWebBean.usuario.login}" size="50" maxlength="50"/>
 
-                        <h:outputText value="Senha" />
-                        <h:inputSecret id="senha" value="#{usuarioWebBean.usuario.senha}"  size="50" maxlength="50" required="#{usuarioWebBean.requiredPassword}" requiredMessage="Campo Senha é obrigatório."/>
+                                <h:outputText value="Senha" />
+                                <h:inputSecret id="senha" value="#{usuarioWebBean.usuario.senha}"  size="50" maxlength="50"/>
 
-                        <h:outputText value="Confirmar a senha" />
-                        <h:inputSecret id="confirmarSenha" value="#{usuarioWebBean.confirmaSenha}" size="50" maxlength="50" required="#{usuarioWebBean.requiredPassword}" requiredMessage="Campo Confirmar a senha é obrigatório."/>
-                    </h:panelGrid>
+                                <h:outputText value="Confirmar a senha" />
+                                <h:inputSecret id="confirmarSenha" value="#{usuarioWebBean.confirmaSenha}" size="50" maxlength="50"/>
+                            </h:panelGrid>
+                         </rich:tab>
+                        <rich:tab label="Telefones">
+                            <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
+                                <h:outputText value="Tipo" />
+                                <h:selectOneMenu value="#{usuarioWebBean.tipoTelefone}">
+                                    <f:selectItem itemValue="" itemLabel="Selecione um tipo"></f:selectItem>
+                                    <f:selectItem itemValue="Celular" itemLabel="Celular"></f:selectItem>
+                                    <f:selectItem itemValue="Telefone" itemLabel="Telefone"></f:selectItem>
+                                </h:selectOneMenu>
+                                <h:outputText value="Número" />
+                                <h:inputText id="numero" value="#{usuarioWebBean.numeroTelefone}" size="13" maxlength="13"/>
+                            </h:panelGrid>
+                            <h:commandButton value="Adicionar" action="#{usuarioWebBean.adicionarTelefone}" image="/imagens/btn_adicionar.gif"/>
+
+                             <a4j:queue requestDelay="100" />
+                            <rich:dataTable
+                                id="tabela"
+                                rows="#{usuarioWebBean.qtdeRegistros}"
+                                border="2"
+                                headerClass="linha_titulo"
+                                rendered="#{! empty usuarioWebBean.listaTelefones}"
+                                value="#{usuarioWebBean.listaTelefones}"
+                                var="telefone"
+                                reRender="ds1"
+                                onRowMouseOver="this.className='linha_sobre'"
+                                onRowMouseOut="this.className='linha_normal'"
+                                width="420">
+
+                                <f:facet name="header">
+                                    <h:panelGroup>
+                                        <rich:datascroller align="center"
+                                                           ajaxSingle="false"
+                                                           maxPages="10"
+                                                           for="tabela"
+                                                           page="#{usuarioWebBean.pagina}"
+                                                           rendered="#{! empty usuarioWebBean.listaTelefones}"
+                                                           reRender="tabela"
+                                                           id="ds1" />
+                                        <h:outputText value="  #{usuarioWebBean.listaTelefones.rowCount} registros" rendered="#{! empty usuarioWebBean.listaTelefones}"/>
+                                    </h:panelGroup>
+                                </f:facet>
+
+                                <rich:column sortBy="#{telefone.codtelefone}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="Código" />
+                                    </f:facet>
+                                    <h:outputText value="#{telefone.codtelefone}"/>
+                                </rich:column>
+
+                                <rich:column sortBy="#{telefone.tipo}">
+                                    <f:facet name="header">
+                                        <h:outputText value="Tipo de telefone" />
+                                    </f:facet>
+                                    <h:outputText value="#{telefone.tipo}"  />
+                                </rich:column>
+
+                                <rich:column sortBy="#{telefone.numero}">
+                                    <f:facet name="header">
+                                        <h:outputText value="Número de telefone" />
+                                    </f:facet>
+                                    <h:outputText value="#{telefone.numero}"  />
+                                </rich:column>
+
+                                <rich:column style="text-align:center">
+                                    <f:facet name="header" >
+                                        <h:outputText value="Editar" />
+                                    </f:facet>
+                                    <h:commandButton action="#{usuarioWebBean.editarTelefone}" image="/imagens/btn_editar.gif" />
+                                </rich:column>
+
+                                <rich:column style="text-align:center">
+                                    <f:facet name="header">
+                                        <h:outputText value="Excluir" />
+                                    </f:facet>
+                                    <a4j:commandButton action="#{usuarioWebBean.setarTelefoneExcluir}" image="/imagens/btn_excluir_mini.gif"
+                                                       oncomplete="Richfaces.showModalPanel('modalConfirmacaoExclusaoTelefone')"
+                                                       reRender="modalConfirmacaoExclusaoTelefone" />
+                                </rich:column>
+
+                            </rich:dataTable>
+                        </rich:tab>
+                        <rich:tab label="Carros"></rich:tab>
+                    </rich:tabPanel>
                     <br/>
                     <h:panelGroup>
                         <h:commandButton value="Salvar" action="#{usuarioWebBean.salvarMais}" image="/imagens/btn_salvar_mais.gif" />
@@ -42,6 +127,37 @@
                     </h:panelGroup>
                 </rich:panel>
             </h:form>
+
+            <rich:modalPanel id="modalConfirmacaoExclusaoTelefone" width="300" autosized="true">
+                <f:facet name="header">
+                    <h:outputText value="ATENÇÃO" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:graphicImage value="/imagens/btnclose.png" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
+                </f:facet>
+
+                <h:form>
+                    <a4j:keepAlive beanName="usuarioWebBean" />
+                    <h:graphicImage value="/imagens/warning_gde.gif"/>
+                    <h:outputText value="  Confirma a Exclusão do Telefone " style="font-size: 10pt;"/>
+                    <strong>
+                        <h:outputText value="#{usuarioWebBean.telefone.numero}" style="font-size: 10pt;"/>
+                    </strong>
+
+                    <br/><br/>
+                    <div align="center">
+                        <h:panelGrid columns="2">
+                            <h:commandButton
+                                id="btn_confirmar"
+                                action="#{usuarioWebBean.excluirTelefone}"
+                                onclick="Richfaces.showModalPanel('modalMensagemProcessando')"
+                                image="/imagens/btn_confirmar.gif" />
+
+                            <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
+                        </h:panelGrid>
+                    </div>
+                </h:form>
+            </rich:modalPanel>
         </ui:define>
     </ui:composition>
 </jsp:root>
