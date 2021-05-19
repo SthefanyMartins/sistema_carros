@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package br.com.formedici.carros.model;
 
 import java.io.Serializable;
@@ -11,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,7 +14,7 @@ import javax.persistence.OneToMany;
 
 /**
  *
- * @author gabri
+ * @author Sthefany
  */
 @Entity
 @NamedQueries({
@@ -38,7 +34,7 @@ public class Usuario extends PadraoModel implements Serializable{
     @Column(name="senha", length=50, nullable=false)
     private String senha;
 
-    @OneToMany(mappedBy = "usuario", cascade =  CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade =  CascadeType.ALL, fetch=FetchType.EAGER)
     private List<Telefone> telefones = new ArrayList<Telefone>();
 
     public Usuario(){
@@ -99,5 +95,4 @@ public class Usuario extends PadraoModel implements Serializable{
         hash = 97 * hash + (this.codusuario != null ? this.codusuario.hashCode() : 0);
         return hash;
     }
-
 }

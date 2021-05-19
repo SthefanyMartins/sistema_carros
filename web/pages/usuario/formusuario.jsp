@@ -18,9 +18,9 @@
                 <a4j:keepAlive beanName="usuarioWebBean" />
 
                 <rich:panel header="Cadastro de Usuario" style="width:600px;">
-                    <rich:tabPanel>
-                        <rich:tab label="Cadastro">
-                            <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
+                    <rich:tabPanel switchType="client">
+                        <rich:tab label="Cadastro" id="tabCadastro">
+                            <h:panelGrid columns="2">
                                 <h:outputText value="Código" />
                                 <h:inputText id="codusuario" value="#{usuarioWebBean.usuario.codusuario}" size="10" maxlength="10" rendered="#{! usuarioWebBean.edicao}" converterMessage="O campo Código deve ser um inteiro." />
                                 <h:inputText id="codusuario_desabilitado" value="#{usuarioWebBean.usuario.codusuario}" size="10" rendered="#{usuarioWebBean.edicao}" disabled="true" />
@@ -35,22 +35,23 @@
                                 <h:inputSecret id="confirmarSenha" value="#{usuarioWebBean.confirmaSenha}" size="50" maxlength="50"/>
                             </h:panelGrid>
                          </rich:tab>
-                        <rich:tab label="Telefones">
-                            <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda">
+                         <rich:tab label="Telefones" id="tabTelefones">
+                             <h:panelGrid columns="2" id="pg_telefones" columnClasses="alinha_direita,alinha_esquerda" >
                                 <h:outputText value="Tipo" />
-                                <h:selectOneMenu value="#{usuarioWebBean.tipoTelefone}">
-                                    <f:selectItem itemValue="" itemLabel="Selecione um tipo"></f:selectItem>
-                                    <f:selectItem itemValue="Celular" itemLabel="Celular"></f:selectItem>
-                                    <f:selectItem itemValue="Telefone" itemLabel="Telefone"></f:selectItem>
+                                <h:selectOneMenu value="#{usuarioWebBean.telefone.tipo}">
+                                    <f:selectItem itemValue="0" itemLabel="Selecione um tipo"></f:selectItem>
+                                    <f:selectItem itemValue="1" itemLabel="Celular"></f:selectItem>
+                                    <f:selectItem itemValue="2" itemLabel="Telefone"></f:selectItem>
                                 </h:selectOneMenu>
                                 <h:outputText value="Número" />
-                                <h:inputText id="numero" value="#{usuarioWebBean.numeroTelefone}" size="13" maxlength="13"/>
+                                <h:inputText id="numero" value="#{usuarioWebBean.telefone.numero}" size="13" maxlength="13"/>
                             </h:panelGrid>
-                            <h:commandButton value="Adicionar" action="#{usuarioWebBean.adicionarTelefone}" image="/imagens/btn_adicionar.gif"/>
-
+                             <br/>
+                             <a4j:commandButton action="#{usuarioWebBean.adicionarTelefone}" image="/imagens/btn_adicionar.gif" reRender="tabela_telefones, pg_telefones"/>
+                             <br/>
                              <a4j:queue requestDelay="100" />
                             <rich:dataTable
-                                id="tabela"
+                                id="tabela_telefones"
                                 rows="#{usuarioWebBean.qtdeRegistros}"
                                 border="2"
                                 headerClass="linha_titulo"
@@ -67,10 +68,10 @@
                                         <rich:datascroller align="center"
                                                            ajaxSingle="false"
                                                            maxPages="10"
-                                                           for="tabela"
+                                                           for="tabela_telefones"
                                                            page="#{usuarioWebBean.pagina}"
                                                            rendered="#{! empty usuarioWebBean.listaTelefones}"
-                                                           reRender="tabela"
+                                                           reRender="tabela_telefones"
                                                            id="ds1" />
                                         <h:outputText value="  #{usuarioWebBean.listaTelefones.rowCount} registros" rendered="#{! empty usuarioWebBean.listaTelefones}"/>
                                     </h:panelGroup>
@@ -83,18 +84,18 @@
                                     <h:outputText value="#{telefone.codtelefone}"/>
                                 </rich:column>
 
-                                <rich:column sortBy="#{telefone.tipo}">
-                                    <f:facet name="header">
-                                        <h:outputText value="Tipo de telefone" />
-                                    </f:facet>
-                                    <h:outputText value="#{telefone.tipo}"  />
-                                </rich:column>
-
                                 <rich:column sortBy="#{telefone.numero}">
                                     <f:facet name="header">
                                         <h:outputText value="Número de telefone" />
                                     </f:facet>
                                     <h:outputText value="#{telefone.numero}"  />
+                                </rich:column>
+
+                                <rich:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Tipo de telefone" />
+                                    </f:facet>
+                                    <h:outputText value="#{telefone.tipoDescricao}"/>
                                 </rich:column>
 
                                 <rich:column style="text-align:center">
@@ -115,7 +116,7 @@
 
                             </rich:dataTable>
                         </rich:tab>
-                        <rich:tab label="Carros"></rich:tab>
+                            <rich:tab label="Carros" id="tabCarros"></rich:tab>
                     </rich:tabPanel>
                     <br/>
                     <h:panelGroup>

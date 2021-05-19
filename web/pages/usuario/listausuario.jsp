@@ -144,8 +144,6 @@
                     </div>
                 </h:form>
             </rich:modalPanel>
-
-
         </ui:define>
     </ui:composition>
 </jsp:root>

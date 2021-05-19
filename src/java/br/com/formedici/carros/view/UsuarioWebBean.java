@@ -17,21 +17,18 @@ import javax.faces.model.ListDataModel;
 public class UsuarioWebBean extends PadraoWebBean{
     private UsuarioBean bean;
     private Usuario usuario;
-    private Telefone telefone;
+    private Telefone telefone = new Telefone();
     private ListDataModel listaUsuarios;
     private ListDataModel listaTelefones;
     private Boolean edicao = false;
+    private Boolean statusTelefoneEdicao = false;
     private String confirmaSenha;
     private String pesqLogin;
     private String armazenarSenha;
-    private String tipoTelefone;
-    private String numeroTelefone;
-    private String statusTelefone;
     private List<Telefone> listaTelefonesDeletados = new ArrayList<Telefone>();
 
     public UsuarioWebBean(){
         this.bean = new UsuarioBean();
-        setStatusTelefone("novo");
     }
 
     public String consultar() {
@@ -50,10 +47,6 @@ public class UsuarioWebBean extends PadraoWebBean{
     public String editar() {
         setUsuario((Usuario) getListaUsuarios().getRowData());
         setArmazenarSenha(getUsuario().getSenha());
-        List<Telefone> retorno = getBean().consultarTelefones(getUsuario());
-        if(!Util.isNullOrEmpty(retorno)){
-            getUsuario().setTelefones(retorno);
-        }
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setEdicao(true);
         return "form";
@@ -81,7 +74,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         Boolean valida = true;
         String testaLogin = getUsuario().getLogin().trim();
         String testaSenha = getUsuario().getSenha().trim();
-        if (!getEdicao()) {//quando não estiver editando
+        if (!getEdicao()) {
             if (getUsuario().getCodusuario() == null) {
                 JSFHelper.addErrorMessage("Código do Usuário está em branco!");
                 valida = false;
@@ -108,7 +101,7 @@ public class UsuarioWebBean extends PadraoWebBean{
                 getUsuario().setSenha("");
                 valida = false;
             }
-        }else{//quando estiver editando
+        }else{
             if(Util.isNullOrEmpty(testaSenha) && Util.isNullOrEmpty(getConfirmaSenha().trim())){
                 getUsuario().setSenha(getArmazenarSenha());
             }
@@ -124,7 +117,6 @@ public class UsuarioWebBean extends PadraoWebBean{
             setConfirmaSenha("");
             valida = false;
         }
-        
         return valida;
     }
 
@@ -145,33 +137,31 @@ public class UsuarioWebBean extends PadraoWebBean{
         return null;
     }
 
-    public void limparConsulta(){
+    public String limparConsulta(){
         setPesqLogin("");
+        return null;
     }
-//******************************************************************************************************************
-    
-    public void adicionarTelefone() {
-        if (!"Celular".equals(getTipoTelefone()) && !"Telefone".equals(getTipoTelefone())) {
+
+    public String adicionarTelefone() {
+        if (getTelefone().getTipo() != 1 && getTelefone().getTipo() != 2) {
             JSFHelper.addErrorMessage("Selecione um tipo de telefone!");
-            return;
-        } else if (Util.isNullOrEmpty(getNumeroTelefone())) {
+            return null;
+        } else if (Util.isNullOrEmpty(getTelefone().getNumero())) {
             JSFHelper.addErrorMessage("Digite um número de telefone válido!");
-            return;
-        } else if ("novo".equals(getStatusTelefone())) {
-            setTelefone(new Telefone());
+            return null;
+        } else if (!getStatusTelefoneEdicao()) {
             getTelefone().setCodtelefone(definirCodigoTelefone());
-            System.out.println("******" + getTelefone().getCodtelefone() + "*******");
-        } else {
+        }else{
             getUsuario().getTelefones().remove(getTelefone());
         }
-        getTelefone().setTipo(getTipoTelefone());
-        getTelefone().setNumero(getNumeroTelefone());
         getTelefone().setUsuario(getUsuario());
         getUsuario().getTelefones().add(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
-        setTipoTelefone("");
-        setNumeroTelefone(null);
-        setStatusTelefone("novo");
+        setTelefone(new Telefone());
+        getTelefone().setTipo(0);
+        getTelefone().setNumero("");
+        setStatusTelefoneEdicao(false);
+        return null;
     }
 
     public Integer definirCodigoTelefone(){
@@ -186,11 +176,10 @@ public class UsuarioWebBean extends PadraoWebBean{
         return codFinal;
     }
 
-    public void editarTelefone(){
+    public String editarTelefone(){
         setTelefone((Telefone) getListaTelefones().getRowData());
-        setTipoTelefone(getTelefone().getTipo());
-        setNumeroTelefone(getTelefone().getNumero());
-        setStatusTelefone("editar");
+        setStatusTelefoneEdicao(true);
+        return null;
     }
 
     public String setarTelefoneExcluir(){
@@ -198,16 +187,16 @@ public class UsuarioWebBean extends PadraoWebBean{
         return null;
     }
 
-    public void excluirTelefone(){
+    public String excluirTelefone(){
         Integer cod = getBean().proximoCodigo(Telefone.class, "codtelefone");
         if(getTelefone().getCodtelefone() < cod){
             getListaTelefonesDeletados().add(getTelefone());
         }
         getUsuario().getTelefones().remove(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
+        return null;
     }
 
-    //getters e setters
     @Override
     public UsuarioBean getBean(){
         return bean;
@@ -265,22 +254,6 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.armazenarSenha = armazenarSenha;
     }
 
-    public String getNumeroTelefone() {
-        return numeroTelefone;
-    }
-
-    public void setNumeroTelefone(String numeroTelefone) {
-        this.numeroTelefone = numeroTelefone;
-    }
-
-    public String getTipoTelefone() {
-        return tipoTelefone;
-    }
-
-    public void setTipoTelefone(String tipoTelefone) {
-        this.tipoTelefone = tipoTelefone;
-    }
-
     public Telefone getTelefone() {
         return telefone;
     }
@@ -289,13 +262,14 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.telefone = telefone;
     }
 
-    public String getStatusTelefone() {
-        return statusTelefone;
+    public Boolean getStatusTelefoneEdicao() {
+        return statusTelefoneEdicao;
     }
 
-    public void setStatusTelefone(String statusTelefone) {
-        this.statusTelefone = statusTelefone;
+    public void setStatusTelefoneEdicao(Boolean statusTelefoneEdicao) {
+        this.statusTelefoneEdicao = statusTelefoneEdicao;
     }
+
 
     public ListDataModel getListaTelefones() {
         return listaTelefones;
@@ -312,5 +286,4 @@ public class UsuarioWebBean extends PadraoWebBean{
     public void setListaTelefonesDeletados(List<Telefone> listaTelefonesDeletados) {
         this.listaTelefonesDeletados = listaTelefonesDeletados;
     }
-
 }

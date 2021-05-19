@@ -28,8 +28,12 @@ public class Telefone extends PadraoModel implements Serializable{
     @Column(name="numero", length=12, nullable=false)
     private String numero;
 
-    @Column(name="tipo", length=20, nullable=false)
-    private String tipo;
+    /**
+     * 1 - Celular
+     * 2 - Telefone
+     */
+    @Column(name="tipo", nullable=false)
+    private Integer tipo;
 
     @ManyToOne
     @JoinColumn(name = "usuario")
@@ -37,6 +41,16 @@ public class Telefone extends PadraoModel implements Serializable{
 
     public Telefone(){
 
+    }
+
+    public String getTipoDescricao(){
+        String valor = null;
+        if(getTipo() == 1){
+            valor = "Celular";
+        }else{
+            valor = "Telefone";
+        }
+        return valor;
     }
 
     public Integer getCodtelefone() {
@@ -55,11 +69,11 @@ public class Telefone extends PadraoModel implements Serializable{
         this.numero = numero;
     }
 
-    public String getTipo() {
+    public Integer getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(Integer tipo) {
         this.tipo = tipo;
     }
 
