@@ -4,7 +4,10 @@
     <non-jta-data-source>sistema_carros</non-jta-data-source>
     <class>br.com.formedici.carros.model.Carro</class>
     <class>br.com.formedici.carros.model.Usuario</class>
-    <class>br.com.formedici.carros.model.Telefone</class>
+    <class>br.com.formedici.carros.model.UsuarioTelefone</class>
+    <class>br.com.formedici.carros.model.UsuarioCarro</class>
+    <class>br.com.formedici.carros.model.UsuarioCarroPK</class>
+    <class>br.com.formedici.carros.model.UsuarioTelefonePK</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <property name="toplink.logging.level" value="FINE"/>

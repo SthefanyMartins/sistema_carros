@@ -1,6 +1,6 @@
 package br.com.formedici.carros.controller.bean;
 
-import br.com.formedici.carros.model.Telefone;
+import br.com.formedici.carros.model.Carro;
 import br.com.formedici.carros.model.Usuario;
 import br.com.formedici.carros.util.PadraoBean;
 import br.com.formedici.carros.util.PadraoDAO;
@@ -29,11 +29,13 @@ public class UsuarioBean extends PadraoBean{
         return getDAO().consultaQuery(consulta);
     }
 
-    public void deletarTelefones(List<Telefone> telefonesDeletados){
-        for(Telefone t : telefonesDeletados){
-            Telefone tel = (Telefone) findOneByExample(t);
-            tel.setUsuario(null);
-            excluir(tel);
-        }
+    public List<Carro> findAllCarro() {
+        String consulta = "SELECT c FROM Carro c ORDER BY c.codcarro";
+        return getDAO().consultaQuery(consulta);
+    }
+
+    public Carro buscarCarroPorId(Integer id){
+        String consulta = "SELECT c FROM Carro c WHERE c.codcarro = " + id;
+        return (Carro) getDAO().retornaObjeto(consulta);
     }
 }

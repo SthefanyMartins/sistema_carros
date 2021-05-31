@@ -1,14 +1,17 @@
 package br.com.formedici.carros.view;
 
 import br.com.formedici.carros.controller.bean.UsuarioBean;
-import br.com.formedici.carros.model.Telefone;
+import br.com.formedici.carros.model.Carro;
 import br.com.formedici.carros.model.Usuario;
+import br.com.formedici.carros.model.UsuarioTelefone;
 import br.com.formedici.carros.util.PadraoWebBean;
 import br.com.formedici.carros.util.Util;
 import br.com.formedici.carros.util.JSFHelper;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.TreeMap;
 import javax.faces.model.ListDataModel;
 /**
  *
@@ -17,15 +20,19 @@ import javax.faces.model.ListDataModel;
 public class UsuarioWebBean extends PadraoWebBean{
     private UsuarioBean bean;
     private Usuario usuario;
-    private Telefone telefone = new Telefone();
+    private UsuarioTelefone telefone = new UsuarioTelefone();
+    private Carro carro = new Carro();
+    private Integer idcarro;
     private ListDataModel listaUsuarios;
     private ListDataModel listaTelefones;
+    private ListDataModel listaCarros;
     private Boolean edicao = false;
     private Boolean statusTelefoneEdicao = false;
     private String confirmaSenha;
     private String pesqLogin;
     private String armazenarSenha;
-    private List<Telefone> listaTelefonesDeletados = new ArrayList<Telefone>();
+    private List<UsuarioTelefone> listaTelefonesDeletados = new ArrayList<UsuarioTelefone>();
+    private List<Carro> listAdiconarCarro;
 
     public UsuarioWebBean(){
         this.bean = new UsuarioBean();
@@ -40,14 +47,18 @@ public class UsuarioWebBean extends PadraoWebBean{
         setUsuario(new Usuario());
         getUsuario().setCodusuario(getBean().proximoCodigo(Usuario.class, "codusuario"));
         setEdicao(false);
+        setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel());
+        setListaCarros(new ListDataModel());
         return "form";
     }
 
     public String editar() {
         setUsuario((Usuario) getListaUsuarios().getRowData());
         setArmazenarSenha(getUsuario().getSenha());
+        setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
+        setListaCarros(new ListDataModel(getUsuario().getCarros()));
         setEdicao(true);
         return "form";
     }
@@ -62,7 +73,7 @@ public class UsuarioWebBean extends PadraoWebBean{
 
     public String salvar() {
         if(validarParaSalvar()){
-            getBean().deletarTelefones(getListaTelefonesDeletados());
+            getBean().excluirLista(getListaTelefonesDeletados());
             getBean().salvar(getUsuario());
             consultar();
             return "usuario";
@@ -128,7 +139,6 @@ public class UsuarioWebBean extends PadraoWebBean{
     public String excluir() {
         String mensagemExclusao = "";
         mensagemExclusao = getBean().excluir(getUsuario());
-
         if (! mensagemExclusao.equals("")) {
             JSFHelper.addErrorMessage(mensagemExclusao);
             return null;
@@ -150,51 +160,78 @@ public class UsuarioWebBean extends PadraoWebBean{
             JSFHelper.addErrorMessage("Digite um número de telefone válido!");
             return null;
         } else if (!getStatusTelefoneEdicao()) {
-            getTelefone().setCodtelefone(definirCodigoTelefone());
+            getTelefone().setCodusuario(getUsuario());
+            getTelefone().setId(getUsuario().novoItemTelefone());
         }else{
             getUsuario().getTelefones().remove(getTelefone());
         }
-        getTelefone().setUsuario(getUsuario());
         getUsuario().getTelefones().add(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
-        setTelefone(new Telefone());
-        getTelefone().setTipo(0);
+        setTelefone(new UsuarioTelefone());
+        getTelefone().setTipo(1);
         getTelefone().setNumero("");
         setStatusTelefoneEdicao(false);
         return null;
-    }
-
-    public Integer definirCodigoTelefone(){
-        Integer cod = getBean().proximoCodigo(Telefone.class, "codtelefone");
-        Integer codFinal = cod;
-        List<Telefone> telefones = getUsuario().getTelefones();
-        for(Telefone t : telefones){
-            if(t.getCodtelefone() >= cod){
-                codFinal = t.getCodtelefone() + 1;
-            }
-        }
-        return codFinal;
+         
     }
 
     public String editarTelefone(){
-        setTelefone((Telefone) getListaTelefones().getRowData());
+        setTelefone((UsuarioTelefone) getListaTelefones().getRowData());
         setStatusTelefoneEdicao(true);
         return null;
+
     }
 
     public String setarTelefoneExcluir(){
-        setTelefone((Telefone) getListaTelefones().getRowData());
+        setTelefone((UsuarioTelefone) getListaTelefones().getRowData());
         return null;
     }
 
     public String excluirTelefone(){
-        Integer cod = getBean().proximoCodigo(Telefone.class, "codtelefone");
-        if(getTelefone().getCodtelefone() < cod){
-            getListaTelefonesDeletados().add(getTelefone());
-        }
+        getListaTelefonesDeletados().add(getTelefone());
         getUsuario().getTelefones().remove(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         return null;
+    }
+
+    public String adicionarCarro() {
+        if(getIdcarro() == 0){
+            JSFHelper.addErrorMessage("Selecione um carro!");
+            return null;
+        }
+        for(Carro c : getUsuario().getCarros()){
+            if(c.getCodcarro().equals(getIdcarro())){
+                JSFHelper.addErrorMessage("Esse usuário já tem esse carro!");
+                return null;
+            }
+        }
+        setCarro(getBean().buscarCarroPorId(getIdcarro()));
+        getUsuario().getCarros().add(getCarro());
+        setListaCarros(new ListDataModel(getUsuario().getCarros()));
+        setIdcarro(0);
+        setCarro(new Carro());
+        
+        return null;
+    }
+
+    public String setarCarroExcluir(){
+        setCarro((Carro) getListaCarros().getRowData());
+        return null;
+    }
+
+    public String excluirCarro(){
+        getUsuario().getCarros().remove(getCarro());
+        setListaCarros(new ListDataModel(getUsuario().getCarros()));
+        return null;
+    }
+
+    public TreeMap getMapCarros(){
+        TreeMap<String, Integer> mapaCamposFiltro = new TreeMap<String, Integer>();
+        for (Carro c : getListAdiconarCarro()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            mapaCamposFiltro.put(c.getModelo() + " " + c.getCor() + " - " + c.getFabricante() + " - " + sdf.format(c.getAno()), c.getCodcarro());
+        }
+        return mapaCamposFiltro;
     }
 
     @Override
@@ -254,11 +291,11 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.armazenarSenha = armazenarSenha;
     }
 
-    public Telefone getTelefone() {
+    public UsuarioTelefone getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Telefone telefone) {
+    public void setTelefone(UsuarioTelefone telefone) {
         this.telefone = telefone;
     }
 
@@ -270,7 +307,6 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.statusTelefoneEdicao = statusTelefoneEdicao;
     }
 
-
     public ListDataModel getListaTelefones() {
         return listaTelefones;
     }
@@ -279,11 +315,43 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.listaTelefones = listaTelefones;
     }
 
-    public List<Telefone> getListaTelefonesDeletados() {
+    public List<UsuarioTelefone> getListaTelefonesDeletados() {
         return listaTelefonesDeletados;
     }
 
-    public void setListaTelefonesDeletados(List<Telefone> listaTelefonesDeletados) {
+    public void setListaTelefonesDeletados(List<UsuarioTelefone> listaTelefonesDeletados) {
         this.listaTelefonesDeletados = listaTelefonesDeletados;
+    }
+
+    public ListDataModel getListaCarros() {
+        return listaCarros;
+    }
+
+    public void setListaCarros(ListDataModel listaCarros) {
+        this.listaCarros = listaCarros;
+    }
+
+    public Carro getCarro() {
+        return carro;
+    }
+
+    public void setCarro(Carro carro) {
+        this.carro = carro;
+    }
+
+    public List<Carro> getListAdiconarCarro() {
+        return listAdiconarCarro;
+    }
+
+    public void setListAdiconarCarro(List<Carro> listAdiconarCarro) {
+        this.listAdiconarCarro = listAdiconarCarro;
+    }
+
+    public Integer getIdcarro() {
+        return idcarro;
+    }
+
+    public void setIdcarro(Integer idcarro) {
+        this.idcarro = idcarro;
     }
 }

@@ -2,28 +2,21 @@ package br.com.formedici.carros.model;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-
+import javax.persistence.Table;
 /**
  *
  * @author Sthefany
  */
-
 @Entity
-@NamedQueries({
-    @NamedQuery(name="Telefone.findTelefoneAll",      query="SELECT t FROM Telefone t ORDER BY t.codtelefone"),
-    @NamedQuery(name="Telefone.findTelefoneById",     query="SELECT t FROM Telefone t WHERE t.codtelefone= :id"),
-    @NamedQuery(name="Telefone.findTelefoneByUser",     query="SELECT t FROM Telefone t WHERE t.usuario= :user"),
-})
-public class Telefone extends PadraoModel implements Serializable{
-    @Id
-    @Column(name="codtelefone", nullable=false)
-    private Integer codtelefone;
+@Table(name="usuario_telefone")
+public class UsuarioTelefone extends PadraoModel implements Serializable{
+
+    @EmbeddedId
+    private UsuarioTelefonePK id;
 
     @Column(name="numero", length=12, nullable=false)
     private String numero;
@@ -36,10 +29,10 @@ public class Telefone extends PadraoModel implements Serializable{
     private Integer tipo;
 
     @ManyToOne
-    @JoinColumn(name = "usuario")
-    private Usuario usuario;
+    @JoinColumn(name = "codusuario", referencedColumnName="codusuario", insertable=false, updatable=false)
+    private Usuario codusuario;
 
-    public Telefone(){
+    public UsuarioTelefone(){
 
     }
 
@@ -53,12 +46,20 @@ public class Telefone extends PadraoModel implements Serializable{
         return valor;
     }
 
-    public Integer getCodtelefone() {
-        return codtelefone;
+    public Usuario getCodusuario() {
+        return codusuario;
     }
 
-    public void setCodtelefone(Integer codtelefone) {
-        this.codtelefone = codtelefone;
+    public void setCodusuario(Usuario codusuario) {
+        this.codusuario = codusuario;
+    }
+
+    public UsuarioTelefonePK getId() {
+        return id;
+    }
+
+    public void setId(UsuarioTelefonePK id) {
+        this.id = id;
     }
 
     public String getNumero() {
@@ -77,14 +78,6 @@ public class Telefone extends PadraoModel implements Serializable{
         this.tipo = tipo;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -93,8 +86,8 @@ public class Telefone extends PadraoModel implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Telefone other = (Telefone) obj;
-        if (this.codtelefone != other.codtelefone && (this.codtelefone == null || !this.codtelefone.equals(other.codtelefone))) {
+        final UsuarioTelefone other = (UsuarioTelefone) obj;
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -102,8 +95,8 @@ public class Telefone extends PadraoModel implements Serializable{
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 29 * hash + (this.codtelefone != null ? this.codtelefone.hashCode() : 0);
+        int hash = 5;
+        hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
         return hash;
     }
 }

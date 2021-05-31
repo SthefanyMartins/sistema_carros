@@ -103,21 +103,21 @@
                             <h:outputText value="#{carro.modelo}"  />
                         </rich:column>
 
-                        <rich:column sortBy="#{carro.modelo}" filterBy="#{carro.fabricante}" filterEvent="onkeyup">
+                        <rich:column sortBy="#{carro.fabricante}" filterBy="#{carro.fabricante}" filterEvent="onkeyup">
                             <f:facet name="header">
                                 <h:outputText value="Fabricante" />
                             </f:facet>
                             <h:outputText value="#{carro.fabricante}"/>
                         </rich:column>
 
-                        <rich:column sortBy="#{carro.modelo}" filterBy="#{carro.cor}" filterEvent="onkeyup" width="100%">
+                        <rich:column sortBy="#{carro.cor}" filterBy="#{carro.cor}" filterEvent="onkeyup" width="100%">
                             <f:facet name="header">
                                 <h:outputText value="Cor" />
                             </f:facet>
                             <h:outputText value="#{carro.cor}"/>
                         </rich:column>
 
-                        <rich:column sortBy="#{carro.modelo}" >
+                        <rich:column sortBy="#{carro.ano}" >
                             <f:facet name="header">
                                 <h:outputText value="Ano" />
                             </f:facet>

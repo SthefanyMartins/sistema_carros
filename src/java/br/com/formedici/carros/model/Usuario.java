@@ -8,6 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -34,11 +37,30 @@ public class Usuario extends PadraoModel implements Serializable{
     @Column(name="senha", length=50, nullable=false)
     private String senha;
 
-    @OneToMany(mappedBy = "usuario", cascade =  CascadeType.ALL, fetch=FetchType.EAGER)
-    private List<Telefone> telefones = new ArrayList<Telefone>();
+    @OneToMany(mappedBy = "codusuario", cascade =  CascadeType.ALL, fetch=FetchType.EAGER)
+    private List<UsuarioTelefone> telefones = new ArrayList<UsuarioTelefone>();
+
+    @ManyToMany
+    @JoinTable(name = "usuario_carro",
+            joinColumns = {@JoinColumn(name = "codusuario")},
+            inverseJoinColumns = {@JoinColumn(name = "codcarro")})
+    private List<Carro> carros = new ArrayList<Carro>();
 
     public Usuario(){
 
+    }
+
+    public UsuarioTelefonePK novoItemTelefone(){
+        Integer cod = 0;
+        for(UsuarioTelefone tel: getTelefones()){
+            if(tel.getId().getItemtelefone() > cod){
+                cod = tel.getId().getItemtelefone();
+            }
+        }
+        UsuarioTelefonePK pk = new UsuarioTelefonePK();
+        pk.setItemtelefone(cod + 1);
+        pk.setCodusuario(getCodusuario());
+        return pk;
     }
 
     public Integer getCodusuario() {
@@ -65,12 +87,20 @@ public class Usuario extends PadraoModel implements Serializable{
         this.senha = senha;
     }
 
-    public List<Telefone> getTelefones() {
+    public List<UsuarioTelefone> getTelefones() {
         return telefones;
     }
 
-    public void setTelefones(List<Telefone> telefones) {
+    public void setTelefones(List<UsuarioTelefone> telefones) {
         this.telefones = telefones;
+    }
+
+    public List<Carro> getCarros() {
+        return carros;
+    }
+
+    public void setCarros(List<Carro> carros) {
+        this.carros = carros;
     }
 
     

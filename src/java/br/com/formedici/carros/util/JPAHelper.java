@@ -34,7 +34,7 @@ public class JPAHelper implements ServletContextListener {
          */
         System.out.println("EntityManagerFactory inicializada");
     }
-    
+
     public void contextDestroyed(ServletContextEvent sce) {
         if (factory != null) {
             factory.close();

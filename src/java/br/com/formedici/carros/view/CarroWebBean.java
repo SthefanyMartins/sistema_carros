@@ -10,7 +10,6 @@ import br.com.formedici.carros.util.Util;
 import br.com.formedici.carros.util.JSFHelper;
 import br.com.formedici.carros.util.PadraoWebBean;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import javax.faces.model.ListDataModel;
 
 /**

@@ -226,7 +226,6 @@ public abstract class PadraoBean {
     public Integer proximoCodigo(Class classe, String codigo) {
         String sFrase = "SELECT MAX(obj." + codigo + ") FROM " + classe.getSimpleName() + " obj";
         Object retorno = getDAO().retornaObjeto(sFrase);
-        System.out.println("**********" + retorno + "**************");
         if (retorno == null) {
             return 1;
         } else {

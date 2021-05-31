@@ -14,19 +14,19 @@ CREATE TABLE usuario (
 	CONSTRAINT usuario_pk PRIMARY KEY (codusuario)
 );
 
-CREATE TABLE telefone(
-codtelefone integer NOT NULl,
-numero character varying(13) NOT NULL,
-tipo integer NOT NULL,
-usuario integer,
-CONSTRAINT telefone_pk PRIMARY KEY (codtelefone),
-FOREIGN KEY (usuario) REFERENCES usuario(codusuario)
+CREATE TABLE usuario_telefone(
+	itemtelefone integer NOT NULl,
+	numero character varying(13) NOT NULL,
+	tipo integer NOT NULL,
+	codusuario integer,
+	CONSTRAINT telefone_pk PRIMARY KEY (itemtelefone, codusuario),
+	FOREIGN KEY (codusuario) REFERENCES usuario(codusuario)
 );
 
 Create TABLE usuario_carro(
-codusuario integer NOT NULL,
-codcarro integer NOT NULL,
-CONSTRAINT usuario_carro_pk PRIMARY KEY (codusuario, codcarro),
-FOREIGN KEY (codusuario) REFERENCES usuario(codusuario),
-FOREIGN KEY (codcarro) REFERENCES carro(codcarro)
+	codusuario integer NOT NULL,
+	codcarro integer NOT NULL,
+	CONSTRAINT usuario_carro_pk PRIMARY KEY (codusuario, codcarro),
+	FOREIGN KEY (codusuario) REFERENCES usuario(codusuario),
+	FOREIGN KEY (codcarro) REFERENCES carro(codcarro)
 );

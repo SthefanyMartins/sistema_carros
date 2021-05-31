@@ -6,10 +6,13 @@
 package br.com.formedici.carros.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
@@ -41,6 +44,9 @@ public class Carro extends PadraoModel implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column(name="ano", nullable=false)
     private Date ano;
+
+    @ManyToMany(mappedBy = "carros")
+    private List<Usuario> usuarios = new ArrayList<Usuario>();
     
     public Carro() {
         
@@ -85,6 +91,15 @@ public class Carro extends PadraoModel implements Serializable {
     public void setModelo(String modelo) {
         this.modelo = modelo;
     }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
