@@ -19,7 +19,7 @@
 
                 <rich:panel header="Cadastro de Usuario" style="width:750px;">
                     <rich:tabPanel switchType="client">
-                        <rich:tab label="Cadastro" id="tabCadastro">
+                        <rich:tab label="Cadastro">
                             <h:panelGrid columns="2" columnClasses="alinha_direita,alinha_esquerda" style="margin-left:120px">
                                 <h:outputText value="Código" />
                                 <h:inputText id="codusuario" value="#{usuarioWebBean.usuario.codusuario}" size="10" maxlength="10" rendered="#{! usuarioWebBean.edicao}" converterMessage="O campo Código deve ser um inteiro." />
@@ -219,7 +219,7 @@
                     <h:graphicImage value="/imagens/btnclose.png" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
                 </f:facet>
 
-                <h:form>
+                <h:form id="formExcluirTelefone">
                     <a4j:keepAlive beanName="usuarioWebBean" />
                     <h:graphicImage value="/imagens/warning_gde.gif"/>
                     <h:outputText value="Confirma a Exclusão do Telefone " style="font-size: 10pt;"/>
@@ -230,10 +230,11 @@
                     <br/><br/>
                     <div align="center">
                         <h:panelGrid columns="2">
-                            <h:commandButton
+                            <a4j:commandButton
                                 id="btn_confirmar"
                                 action="#{usuarioWebBean.excluirTelefone}"
-                                onclick="Richfaces.showModalPanel('modalMensagemProcessando')"
+                                reRender="tabela_telefones"
+                                oncomplete="Richfaces.hideModalPanel('modalConfirmacaoExclusaoTelefone');"
                                 image="/imagens/btn_confirmar.gif" />
 
                             <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
@@ -250,7 +251,7 @@
                     <h:graphicImage value="/imagens/btnclose.png" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
                 </f:facet>
 
-                <h:form>
+                <h:form id="formExcluirCarro">
                     <a4j:keepAlive beanName="usuarioWebBean" />
                     <h:graphicImage value="/imagens/warning_gde.gif"/>
                     <h:outputText value="Confirma a Exclusão do Carro " style="font-size: 10pt;"/>
@@ -261,10 +262,11 @@
                     <br/><br/>
                     <div align="center">
                         <h:panelGrid columns="2">
-                            <h:commandButton
+                            <a4j:commandButton
                                 id="btn_confirmar"
                                 action="#{usuarioWebBean.excluirCarro}"
-                                onclick="Richfaces.showModalPanel('modalMensagemProcessando')"
+                                reRender="tabela_carros"
+                                oncomplete="Richfaces.hideModalPanel('modalConfirmacaoExclusaoCarro');"
                                 image="/imagens/btn_confirmar.gif" />
 
                             <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />

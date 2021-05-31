@@ -50,6 +50,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel());
         setListaCarros(new ListDataModel());
+        getTelefone().setNumero("");
         return "form";
     }
 
@@ -59,6 +60,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setListaCarros(new ListDataModel(getUsuario().getCarros()));
+        getTelefone().setNumero("");
         setEdicao(true);
         return "form";
     }
