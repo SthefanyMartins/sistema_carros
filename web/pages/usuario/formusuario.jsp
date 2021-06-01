@@ -237,7 +237,7 @@
                                 oncomplete="Richfaces.hideModalPanel('modalConfirmacaoExclusaoTelefone');"
                                 image="/imagens/btn_confirmar.gif" />
 
-                            <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
+                            <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusaoTelefone')" />
                         </h:panelGrid>
                     </div>
                 </h:form>
@@ -269,7 +269,7 @@
                                 oncomplete="Richfaces.hideModalPanel('modalConfirmacaoExclusaoCarro');"
                                 image="/imagens/btn_confirmar.gif" />
 
-                            <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusao')" />
+                            <h:graphicImage value="/imagens/btn_cancelar.gif" style="cursor:pointer" onclick="Richfaces.hideModalPanel('modalConfirmacaoExclusaoCarro')" />
                         </h:panelGrid>
                     </div>
                 </h:form>
