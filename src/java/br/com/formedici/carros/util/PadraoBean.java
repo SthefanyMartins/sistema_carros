@@ -64,6 +64,7 @@ public abstract class PadraoBean {
         try {
             this.getEntityManager().getTransaction().begin();
             this.getDAO().excluir(objeto);
+            this.getEntityManager().flush();
             this.getEntityManager().getTransaction().commit();
         } catch (Exception e) {
             System.out.println("Ocorreu um erro durante o processo.");
@@ -85,6 +86,7 @@ public abstract class PadraoBean {
             for (Object object : lista) {
                 this.getDAO().excluir(object);
             }
+            this.getEntityManager().flush();
             this.getEntityManager().getTransaction().commit();
             //this.getEntityManager().flush();
         } catch (Exception e) {

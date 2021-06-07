@@ -23,6 +23,7 @@ public class UsuarioWebBean extends PadraoWebBean{
     private UsuarioTelefone telefone = new UsuarioTelefone();
     private Carro carro = new Carro();
     private Integer idcarro;
+    private Integer idUltimoTelefoneDoBanco;
     private ListDataModel listaUsuarios;
     private ListDataModel listaTelefones;
     private ListDataModel listaCarros;
@@ -51,6 +52,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         setListaTelefones(new ListDataModel());
         setListaCarros(new ListDataModel());
         getTelefone().setNumero("");
+        setIdUltimoTelefoneDoBanco(0);
         return "form";
     }
 
@@ -60,6 +62,13 @@ public class UsuarioWebBean extends PadraoWebBean{
         setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setListaCarros(new ListDataModel(getUsuario().getCarros()));
+        for(UsuarioTelefone ut: getUsuario().getTelefones()){
+            if(ut == null){
+                setIdUltimoTelefoneDoBanco(0);
+            }else{
+                setIdUltimoTelefoneDoBanco(ut.getId().getItemtelefone());
+            }
+        }
         getTelefone().setNumero("");
         setEdicao(true);
         return "form";
@@ -77,6 +86,9 @@ public class UsuarioWebBean extends PadraoWebBean{
         if(validarParaSalvar()){
             getBean().excluirLista(getListaTelefonesDeletados());
             getBean().salvar(getUsuario());
+            getUsuario().setLogin("");
+            getUsuario().setSenha("");
+            getUsuario().setCodusuario(0);
             consultar();
             return "usuario";
         }
@@ -140,11 +152,15 @@ public class UsuarioWebBean extends PadraoWebBean{
 
     public String excluir() {
         String mensagemExclusao = "";
+        getBean().excluirLista(getUsuario().getTelefones());
         mensagemExclusao = getBean().excluir(getUsuario());
         if (! mensagemExclusao.equals("")) {
             JSFHelper.addErrorMessage(mensagemExclusao);
             return null;
         }
+        getUsuario().setLogin("");
+        getUsuario().setSenha("");
+        getUsuario().setCodusuario(0);
         consultar();
         return null;
     }
@@ -170,8 +186,6 @@ public class UsuarioWebBean extends PadraoWebBean{
         getUsuario().getTelefones().add(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setTelefone(new UsuarioTelefone());
-        getTelefone().setTipo(1);
-        getTelefone().setNumero("");
         setStatusTelefoneEdicao(false);
         return null;
          
@@ -190,9 +204,12 @@ public class UsuarioWebBean extends PadraoWebBean{
     }
 
     public String excluirTelefone(){
-        getListaTelefonesDeletados().add(getTelefone());
+        if(getIdUltimoTelefoneDoBanco() <= getTelefone().getId().getItemtelefone()){
+            getListaTelefonesDeletados().add(getTelefone());
+        }
         getUsuario().getTelefones().remove(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
+        setTelefone(new UsuarioTelefone());
         return null;
     }
 
@@ -356,4 +373,13 @@ public class UsuarioWebBean extends PadraoWebBean{
     public void setIdcarro(Integer idcarro) {
         this.idcarro = idcarro;
     }
+
+    public Integer getIdUltimoTelefoneDoBanco() {
+        return idUltimoTelefoneDoBanco;
+    }
+
+    public void setIdUltimoTelefoneDoBanco(Integer idUltimoTelefoneDoBanco) {
+        this.idUltimoTelefoneDoBanco = idUltimoTelefoneDoBanco;
+    }
+
 }
