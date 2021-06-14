@@ -4,6 +4,7 @@
  */
 package br.com.formedici.carros.util;
 
+import br.com.formedici.carros.controller.bean.UsuarioBean;
 import br.com.formedici.carros.util.converter.ValorPadrao;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -159,8 +160,7 @@ public class PopupManagerWebBean extends PadraoWebBean {
                 this.setPesquisaInterfaceBean(this.getLOCALIZACAO_BEANS_CONTROLE() + this.getPesquisaNomeObjetoPrincipal() + PadraoWebBean.PESQUISA_BEAN_SUFIXO);
             } else {
                 //Um bean padrao para realizar consultas.
-                //Coloquei o beneficiario pois o padraoBean nao permite instanciar
-                //xdsthis.setPesquisaInterfaceBean(BeneficiarioBean.class.getName());
+                this.setPesquisaInterfaceBean(UsuarioBean.class.getName());
             }
         }
         //
