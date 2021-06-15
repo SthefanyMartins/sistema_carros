@@ -7,11 +7,8 @@ import br.com.formedici.carros.model.UsuarioTelefone;
 import br.com.formedici.carros.util.PadraoWebBean;
 import br.com.formedici.carros.util.Util;
 import br.com.formedici.carros.util.JSFHelper;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import br.com.formedici.carros.util.PopupManagerWebBean;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.TreeMap;
 import javax.faces.model.ListDataModel;
 /**
  *
@@ -23,7 +20,6 @@ public class UsuarioWebBean extends PadraoWebBean{
     private UsuarioTelefone telefone = new UsuarioTelefone();
     private Carro carro = new Carro();
     private Integer idcarro;
-    private Integer idUltimoTelefoneDoBanco;
     private ListDataModel listaUsuarios;
     private ListDataModel listaTelefones;
     private ListDataModel listaCarros;
@@ -32,8 +28,6 @@ public class UsuarioWebBean extends PadraoWebBean{
     private String confirmaSenha;
     private String pesqLogin;
     private String armazenarSenha;
-    private List<UsuarioTelefone> listaTelefonesDeletados = new ArrayList<UsuarioTelefone>();
-    private List<Carro> listAdiconarCarro;
 
     public UsuarioWebBean(){
         this.bean = new UsuarioBean();
@@ -48,27 +42,18 @@ public class UsuarioWebBean extends PadraoWebBean{
         setUsuario(new Usuario());
         getUsuario().setCodusuario(getBean().proximoCodigo(Usuario.class, "codusuario"));
         setEdicao(false);
-        setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel());
         setListaCarros(new ListDataModel());
         getTelefone().setNumero("");
-        setIdUltimoTelefoneDoBanco(0);
         return "form";
     }
 
     public String editar() {
         setUsuario((Usuario) getListaUsuarios().getRowData());
+        setUsuario((Usuario) getBean().getObjeto(Usuario.class, getUsuario().getCodusuario()));
         setArmazenarSenha(getUsuario().getSenha());
-        setListAdiconarCarro(getBean().findAllCarro());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setListaCarros(new ListDataModel(getUsuario().getCarros()));
-        for(UsuarioTelefone ut: getUsuario().getTelefones()){
-            if(ut == null){
-                setIdUltimoTelefoneDoBanco(0);
-            }else{
-                setIdUltimoTelefoneDoBanco(ut.getId().getItemtelefone());
-            }
-        }
         getTelefone().setNumero("");
         setEdicao(true);
         return "form";
@@ -84,11 +69,7 @@ public class UsuarioWebBean extends PadraoWebBean{
 
     public String salvar() {
         if(validarParaSalvar()){
-            getBean().excluirLista(getListaTelefonesDeletados());
-            getBean().salvar(getUsuario());
-            getUsuario().setLogin("");
-            getUsuario().setSenha("");
-            getUsuario().setCodusuario(0);
+            getBean().salvar(getUsuario(), getEdicao());
             consultar();
             return "usuario";
         }
@@ -204,32 +185,9 @@ public class UsuarioWebBean extends PadraoWebBean{
     }
 
     public String excluirTelefone(){
-        if(getIdUltimoTelefoneDoBanco() <= getTelefone().getId().getItemtelefone()){
-            getListaTelefonesDeletados().add(getTelefone());
-        }
         getUsuario().getTelefones().remove(getTelefone());
         setListaTelefones(new ListDataModel(getUsuario().getTelefones()));
         setTelefone(new UsuarioTelefone());
-        return null;
-    }
-
-    public String adicionarCarro() {
-        if(getIdcarro() == 0){
-            JSFHelper.addErrorMessage("Selecione um carro!");
-            return null;
-        }
-        for(Carro c : getUsuario().getCarros()){
-            if(c.getCodcarro().equals(getIdcarro())){
-                JSFHelper.addErrorMessage("Esse usuário já tem esse carro!");
-                return null;
-            }
-        }
-        setCarro(getBean().buscarCarroPorId(getIdcarro()));
-        getUsuario().getCarros().add(getCarro());
-        setListaCarros(new ListDataModel(getUsuario().getCarros()));
-        setIdcarro(0);
-        setCarro(new Carro());
-        
         return null;
     }
 
@@ -244,13 +202,56 @@ public class UsuarioWebBean extends PadraoWebBean{
         return null;
     }
 
-    public TreeMap getMapCarros(){
-        TreeMap<String, Integer> mapaCamposFiltro = new TreeMap<String, Integer>();
-        for (Carro c : getListAdiconarCarro()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            mapaCamposFiltro.put(c.getModelo() + " " + c.getCor() + " - " + c.getFabricante() + " - " + sdf.format(c.getAno()), c.getCodcarro());
+    //popups pesquisa de carro
+    public String changeCarro() {
+        if (getCarro().getCodcarro() != null) {
+            Carro catCarroAux = (Carro) getBean().getObjeto(Carro.class, getCarro().getCodcarro());
+            if (catCarroAux != null) {
+                setCarro(catCarroAux);
+            } else {
+                setCarro(new Carro());
+            }
+        } else {
+            setCarro(new Carro());
         }
-        return mapaCamposFiltro;
+        return null;
+    }
+
+    public String pesquisaCarro() {
+        super.limpaParametrosDePesquisa();
+
+        PopupManagerWebBean popupManagerWB = (PopupManagerWebBean) JSFHelper.getManagedBean("popupWebBean");
+        popupManagerWB.setCamposSQL("c.codcarro, c.modelo, c.fabricante, c.cor");
+        popupManagerWB.setTabelasSQL("Carro c");
+        popupManagerWB.setCampoRetorno(0);
+        
+        super.setPesquisaBeanEFuncaoDeRetorno("usuarioWebBean.popupRetornoCarro");
+        super.setPesquisaCabecalhos("Código,Modelo,Fabricante,Cor");
+        super.setPesquisaCamposReRender("codcarro,modeloCarro,fabricanteCarro,corCarro,anoCarro");
+
+        return null;
+    }
+
+    public String popupRetornoCarro() {
+        Carro objeto = (Carro) this.getBean().getObjeto(Carro.class, super.getObjetoDePesquisaSelecionado());
+        this.setCarro(objeto);
+        super.limpaParametrosDePesquisa();
+
+        return null;
+    }
+
+    public void inserirCarro() {
+        Boolean existeCarro = this.getBean().existeIdSimples(Carro.class, getCarro().getCodcarro());
+        if (!existeCarro) {
+            JSFHelper.addErrorMessage("Digite um Carro cadastrado");
+        } else if(getUsuario().existeCarro(getCarro().getCodcarro())){
+            JSFHelper.addErrorMessage("Carro já incluso!");
+        } else {
+            getUsuario().getCarros().add(getCarro());
+            setListaCarros(new ListDataModel(getUsuario().getCarros()));
+        }
+        setCarro(new Carro());
+        super.limpaParametrosDePesquisa();
     }
 
     @Override
@@ -334,14 +335,6 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.listaTelefones = listaTelefones;
     }
 
-    public List<UsuarioTelefone> getListaTelefonesDeletados() {
-        return listaTelefonesDeletados;
-    }
-
-    public void setListaTelefonesDeletados(List<UsuarioTelefone> listaTelefonesDeletados) {
-        this.listaTelefonesDeletados = listaTelefonesDeletados;
-    }
-
     public ListDataModel getListaCarros() {
         return listaCarros;
     }
@@ -358,28 +351,12 @@ public class UsuarioWebBean extends PadraoWebBean{
         this.carro = carro;
     }
 
-    public List<Carro> getListAdiconarCarro() {
-        return listAdiconarCarro;
-    }
-
-    public void setListAdiconarCarro(List<Carro> listAdiconarCarro) {
-        this.listAdiconarCarro = listAdiconarCarro;
-    }
-
     public Integer getIdcarro() {
         return idcarro;
     }
 
     public void setIdcarro(Integer idcarro) {
         this.idcarro = idcarro;
-    }
-
-    public Integer getIdUltimoTelefoneDoBanco() {
-        return idUltimoTelefoneDoBanco;
-    }
-
-    public void setIdUltimoTelefoneDoBanco(Integer idUltimoTelefoneDoBanco) {
-        this.idUltimoTelefoneDoBanco = idUltimoTelefoneDoBanco;
     }
 
 }

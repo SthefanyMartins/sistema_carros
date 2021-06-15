@@ -23,7 +23,6 @@ import javax.persistence.OneToMany;
 @NamedQueries({
     @NamedQuery(name="Usuario.findUsuarioAll",      query="SELECT u FROM Usuario u ORDER BY u.codusuario"),
     @NamedQuery(name="Usuario.findUsuarioById",     query="SELECT u FROM Usuario u WHERE u.codusuario = :id"),
-    @NamedQuery(name="Usuario.findUsuarioByLogin",     query="SELECT u FROM Usuario u WHERE u.login = :login"),
 })
 public class Usuario extends PadraoModel implements Serializable{
 
@@ -37,7 +36,7 @@ public class Usuario extends PadraoModel implements Serializable{
     @Column(name="senha", length=50, nullable=false)
     private String senha;
 
-    @OneToMany(mappedBy = "codusuario", cascade =  CascadeType.ALL, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "codusuario", cascade =  CascadeType.ALL)
     private List<UsuarioTelefone> telefones = new ArrayList<UsuarioTelefone>();
 
     @ManyToMany
@@ -61,6 +60,18 @@ public class Usuario extends PadraoModel implements Serializable{
         pk.setItemtelefone(cod + 1);
         pk.setCodusuario(getCodusuario());
         return pk;
+    }
+
+    public Boolean existeCarro(Integer codcarro){
+        if (getCarros() != null) {
+            for(Carro tCarro : getCarros()){
+                if(tCarro.getCodcarro().equals(codcarro)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public Integer getCodusuario() {

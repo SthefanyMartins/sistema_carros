@@ -134,7 +134,6 @@ public class PopupManagerWebBean extends PadraoWebBean {
         this.setColunasMontadas(true);
         //}
         if (this.getCamposSQL() != null) {
-
             setLista(new ListDataModel(getBean().getDAO().consultaQuery(getFrase())));
         } else {
             Integer modoPesquisa = 2;
@@ -459,13 +458,11 @@ public class PopupManagerWebBean extends PadraoWebBean {
                 || (!Util.isNullOrEmpty(getDadoPesquisado()))) {
             frase.append(" WHERE ");
         }
-
         Boolean incluiAnd = false;
         if (!Util.isNullOrEmpty(getCondicaoSQL())) {
             incluiAnd = true;
             frase.append(getCondicaoSQL());
         }
-
         if (!Util.isNullOrEmpty(getDadoPesquisado())) {
             frase.append(incluiAnd ? " AND " : "")
                     .append(" UPPER(CONCAT(")

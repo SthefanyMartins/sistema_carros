@@ -112,16 +112,25 @@
                             </rich:dataTable>
                         </rich:tab>
                         <rich:tab label="Carros">
-                            <h:panelGrid columns="2" id="pg_carros" columnClasses="alinha_direita,alinha_esquerda" style="margin-left:200px">
-                                <h:outputText value="Carro" />
-                                <h:selectOneMenu value="#{usuarioWebBean.idcarro}">
-                                    <f:selectItem itemValue="0" itemLabel=""></f:selectItem>
-                                    <f:selectItems value="#{usuarioWebBean.mapCarros}"/>
-                                </h:selectOneMenu>
+                            <h:panelGrid columns="2" id="painelCarro" columnClasses="alinha_direita,alinha_esquerda" style="margin-left:32px">
+                                 <h:outputText value="Carro"/>
+                                 <h:panelGroup >
+                                    <h:inputText id="codcarro" value="#{usuarioWebBean.carro.codcarro}" size="3" maxlength="4" converterMessage="O campo Código do Carro deve ser um inteiro. ">
+                                        <a4j:support event="onkeyup" action="#{usuarioWebBean.changeCarro}" reRender="modeloCarro, fabricanteCarro, corCarro, anoCarro" ajaxSingle="true"/>
+                                        <a4j:support event="onblur" action="#{usuarioWebBean.changeCarro}" reRender="modeloCarro, fabricanteCarro, corCarro, anoCarro" ajaxSingle="true"/>
+                                    </h:inputText>
+                                    <a4j:commandButton value="..." immediate="true"
+                                                       action="#{usuarioWebBean.pesquisaCarro}"
+                                                       reRender="painelPrincipalPopup"
+                                                       oncomplete="javascript:Richfaces.showModalPanel('popupPesquisa')"/>
+                                    <h:inputText id="modeloCarro" value="#{usuarioWebBean.carro.modelo}" size="40" disabled="true" style="width:130px"/>
+                                    <h:inputText id="fabricanteCarro" value="#{usuarioWebBean.carro.fabricante}" size="40" disabled="true" style="width:130px"/>
+                                    <h:inputText id="corCarro" value="#{usuarioWebBean.carro.cor}" size="40" disabled="true" style="width:130px"/>
+                                    <h:inputText id="anoCarro" value="#{usuarioWebBean.carro.ano}" size="40" disabled="true" converter="ValorData" style="width:130px"/>
+                                </h:panelGroup>
                             </h:panelGrid>
                             <br/>
-                            <a4j:commandButton action="#{usuarioWebBean.adicionarCarro}" image="/imagens/btn_adicionar.gif"
-                                                reRender="pg_carros, tabela_carros" style="margin-left:320px"/>
+                            <a4j:commandButton image="/imagens/btn_adicionar.gif" value="Inserir" action="#{usuarioWebBean.inserirCarro}" reRender="tabela_carros,painelCarro" style="margin-left:320px"/>
                             <br/>
                             <br/>
                             <a4j:queue requestDelay="100" />

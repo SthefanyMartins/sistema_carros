@@ -1,7 +1,7 @@
 package br.com.formedici.carros.controller.bean;
 
-import br.com.formedici.carros.model.Carro;
 import br.com.formedici.carros.model.Usuario;
+import br.com.formedici.carros.model.UsuarioTelefone;
 import br.com.formedici.carros.util.PadraoBean;
 import br.com.formedici.carros.util.PadraoDAO;
 import br.com.formedici.carros.util.Util;
@@ -29,13 +29,34 @@ public class UsuarioBean extends PadraoBean{
         return getDAO().consultaQuery(consulta);
     }
 
-    public List<Carro> findAllCarro() {
-        String consulta = "SELECT c FROM Carro c ORDER BY c.codcarro";
-        return getDAO().consultaQuery(consulta);
-    }
-
-    public Carro buscarCarroPorId(Integer id){
-        String consulta = "SELECT c FROM Carro c WHERE c.codcarro = " + id;
-        return (Carro) getDAO().retornaObjeto(consulta);
+    public String salvar(Usuario usuarioPrincipal, Boolean edicao){
+        String retorno = "";
+        try{
+            if(edicao){
+                Usuario usuarioBanco = (Usuario) super.getObjeto(Usuario.class, usuarioPrincipal.getCodusuario());
+                this.getEntityManager().getTransaction().begin();
+                for(UsuarioTelefone catTelefoneBanco : usuarioBanco.getTelefones()){
+                    if(!usuarioPrincipal.getTelefones().contains(catTelefoneBanco)){
+                        this.getDAO().excluir(catTelefoneBanco);
+                    }
+                }
+            }
+            if (!this.getEntityManager().getTransaction().isActive()) {
+                this.getEntityManager().getTransaction().begin();
+            }
+            this.getDAO().salvar(usuarioPrincipal);
+            this.getEntityManager().flush();
+            this.getEntityManager().getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro durante o processo.");
+            e.printStackTrace();
+            retorno = "Ocorreu um erro ao salvar o registro. Erro: " + e.toString();
+            if (this.getEntityManager().getTransaction().isActive()) {
+                this.getEntityManager().getTransaction().rollback();
+            }
+        }
+        this.getEntityManager().close();
+        this.getEntityManager().clear();
+        return retorno;
     }
 }
