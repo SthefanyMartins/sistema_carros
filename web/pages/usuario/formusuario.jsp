@@ -97,7 +97,7 @@
                                     <f:facet name="header" >
                                         <h:outputText value="Editar" />
                                     </f:facet>
-                                    <h:commandButton action="#{usuarioWebBean.editarTelefone}" image="/imagens/btn_editar.gif" />
+                                    <a4j:commandButton action="#{usuarioWebBean.editarTelefone}" image="/imagens/btn_editar.gif" reRender="tabela_telefones, pg_telefones"/>
                                 </rich:column>
 
                                 <rich:column style="text-align:center">

@@ -59,4 +59,15 @@ public class UsuarioBean extends PadraoBean{
         this.getEntityManager().clear();
         return retorno;
     }
+
+    public Boolean existeUsuario(String login){
+        String frase = "SELECT u FROM Usuario u WHERE u.login = '" + login + "'";
+        Usuario retorno = (Usuario) getDAO().retornaObjeto(frase);
+        if ((retorno == null)) {
+            return false;
+        }else{
+            return true;
+        }
+        
+    }
 }

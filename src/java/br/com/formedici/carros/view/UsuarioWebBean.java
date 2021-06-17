@@ -8,7 +8,6 @@ import br.com.formedici.carros.util.PadraoWebBean;
 import br.com.formedici.carros.util.Util;
 import br.com.formedici.carros.util.JSFHelper;
 import br.com.formedici.carros.util.PopupManagerWebBean;
-import java.util.LinkedHashMap;
 import javax.faces.model.ListDataModel;
 /**
  *
@@ -45,6 +44,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         setListaTelefones(new ListDataModel());
         setListaCarros(new ListDataModel());
         getTelefone().setNumero("");
+        setCarro(new Carro());
         return "form";
     }
 
@@ -56,6 +56,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         setListaCarros(new ListDataModel(getUsuario().getCarros()));
         getTelefone().setNumero("");
         setEdicao(true);
+        setCarro(new Carro());
         return "form";
     }
 
@@ -89,9 +90,7 @@ public class UsuarioWebBean extends PadraoWebBean{
                 JSFHelper.addErrorMessage("Código do usuário já cadastrado!");
                 valida = false;
             }
-            LinkedHashMap<String, Object> parametros = new LinkedHashMap<String, Object>();
-            parametros.put("login", getUsuario().getLogin());
-            Boolean retornaExiste = getBean().existeParametros("Usuario.findUsuarioByLogin", parametros);
+            Boolean retornaExiste = getBean().existeUsuario(getUsuario().getLogin());
             if(retornaExiste){
                JSFHelper.addErrorMessage("Esse login já existe!");
                getUsuario().setLogin("");
@@ -240,7 +239,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         return null;
     }
 
-    public void inserirCarro() {
+    public String inserirCarro() {
         Boolean existeCarro = this.getBean().existeIdSimples(Carro.class, getCarro().getCodcarro());
         if (!existeCarro) {
             JSFHelper.addErrorMessage("Digite um Carro cadastrado");
@@ -252,6 +251,7 @@ public class UsuarioWebBean extends PadraoWebBean{
         }
         setCarro(new Carro());
         super.limpaParametrosDePesquisa();
+        return null;
     }
 
     @Override
@@ -358,5 +358,4 @@ public class UsuarioWebBean extends PadraoWebBean{
     public void setIdcarro(Integer idcarro) {
         this.idcarro = idcarro;
     }
-
 }
